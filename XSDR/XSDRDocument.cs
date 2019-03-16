@@ -14,12 +14,16 @@ namespace XSDR
         public IEnumerable<string> Keywords { get; set; }
         public IEnumerable<XSDRContributor> Contributors { get; set; }
         public DateTime PublicationDate { get; set; }
+        public IEnumerable<XSDRTemplate> Templates { get; set; }
+        public IEnumerable<XSDRSection> Sections { get; set; }
 
         public XSDRDocument()
         {
             Keywords = new List<string>();
             Contributors = new List<XSDRContributor>();
             PublicationDate = DateTime.UtcNow;
+            Templates = new List<XSDRTemplate>();
+            Sections = new List<XSDRSection>();
         }
     }
 }

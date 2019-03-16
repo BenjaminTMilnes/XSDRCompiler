@@ -44,6 +44,9 @@
     <Compile Include="XSDRContributor.cs" />
     <Compile Include="XSDRContributorType.cs" />
     <Compile Include="XSDRDocument.cs" />
+    <Compile Include="XSDRPageTemplate.cs" />
+    <Compile Include="XSDRSection.cs" />
+    <Compile Include="XSDRTemplate.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
