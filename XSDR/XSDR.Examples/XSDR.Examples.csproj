@@ -52,6 +52,12 @@
   <ItemGroup>
     <Content Include="Examples\example1.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\XSDR.csproj">
+      <Project>{535628ca-f8a2-4387-93bb-1a774c285545}</Project>
+      <Name>XSDR</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
