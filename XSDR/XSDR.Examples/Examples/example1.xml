@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<document version="0.2">
+  <title>An Example Document</title>
+  <subtitle>Let's see if this works</subtitle>
+  <contributor>
+    <name>B. T. Milnes</name>
+    <email-address>madeup@notreal.com</email-address>
+    <website>https://github.com/BenjaminTMilnes/</website>
+  </contributor>
+  <keywords>example, test, something</keywords>
+  <abstract>Something, something, something ... dark side. Something, something, something ... complete.</abstract>
+  <templates>
+    <page-template reference="main" style="page-size: a4;"></page-template>
+  </templates>
+  <sections>
+    <section page-template-reference="main">
+      <h1>Introduction</h1>
+      <p>Grumpy wizards make toxic brew for the Evil Queen and Jack.</p>
+    </section>
+  </sections>
+</document>
