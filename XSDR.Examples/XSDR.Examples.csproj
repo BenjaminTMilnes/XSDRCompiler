@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{43D84B21-102D-480E-9641-9D829EB5F312}</ProjectGuid>
+    <ProjectGuid>{5197B55D-DB63-4567-ACD4-0A4C0A30E284}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>XSDR.Examples</RootNamespace>
@@ -50,13 +50,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Examples\example1.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\XSDR.csproj">
+    <ProjectReference Include="..\XSDR\XSDR.csproj">
       <Project>{535628ca-f8a2-4387-93bb-1a774c285545}</Project>
       <Name>XSDR</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Examples\example1.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

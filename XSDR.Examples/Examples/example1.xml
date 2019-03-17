@@ -15,7 +15,7 @@
   <sections>
     <section page-template-reference="main">
       <h1>Introduction</h1>
-      <p>Grumpy wizards make toxic brew for the Evil Queen and Jack.</p>
+      <p>Grumpy wizards make toxic brew for the Evil Queen and Jack. The <i>quick</i> brown fox jumps over the lazy dog.</p>
     </section>
   </sections>
 </document>

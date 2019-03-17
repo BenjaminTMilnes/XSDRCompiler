@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XSDR", "XSDR.csproj", "{535
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XSDR.Tests", "..\XSDR.Tests\XSDR.Tests.csproj", "{BEA0A4D6-1B1F-4D48-823E-5DEAC0AF3450}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XSDR.Examples", "XSDR.Examples\XSDR.Examples.csproj", "{43D84B21-102D-480E-9641-9D829EB5F312}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XSDR.Examples", "..\XSDR.Examples\XSDR.Examples.csproj", "{5197B55D-DB63-4567-ACD4-0A4C0A30E284}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{BEA0A4D6-1B1F-4D48-823E-5DEAC0AF3450}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEA0A4D6-1B1F-4D48-823E-5DEAC0AF3450}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEA0A4D6-1B1F-4D48-823E-5DEAC0AF3450}.Release|Any CPU.Build.0 = Release|Any CPU
-		{43D84B21-102D-480E-9641-9D829EB5F312}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{43D84B21-102D-480E-9641-9D829EB5F312}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{43D84B21-102D-480E-9641-9D829EB5F312}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{43D84B21-102D-480E-9641-9D829EB5F312}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5197B55D-DB63-4567-ACD4-0A4C0A30E284}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5197B55D-DB63-4567-ACD4-0A4C0A30E284}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5197B55D-DB63-4567-ACD4-0A4C0A30E284}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5197B55D-DB63-4567-ACD4-0A4C0A30E284}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

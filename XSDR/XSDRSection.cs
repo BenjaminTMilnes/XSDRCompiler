@@ -9,5 +9,11 @@ namespace XSDR
     public class XSDRSection
     {
         public string PageTemplateReference { get; set; }
+        public IList<IXSDRPageElement> Subelements { get; set; }
+
+        public XSDRSection()
+        {
+            Subelements = new List<IXSDRPageElement>();
+        }
     }
 }
