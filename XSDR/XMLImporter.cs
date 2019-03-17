@@ -33,42 +33,7 @@ namespace XSDR
             {
                 var s = new XSDRSection();
 
-                foreach (XmlNode e in section.ChildNodes)
-                {
-                    if (e.NodeType == XmlNodeType.Element)
-                    {
-                        if (e.Name == "p" || e.Name == "paragraph")
-                        {
-                            var p = new XSDRParagraph();
-
-                              foreach(XmlNode e2 in e.ChildNodes)
-                            {
-                                  if (e2.NodeType == XmlNodeType.Text)
-                                {
-                                    p.Subelements.Add(new XSDRTextElement(e2.InnerText));
-                                }
-                                    if (e2.NodeType == XmlNodeType.Element &&( e2.Name == "i" || e2.Name == "italic"))
-                                {
-                                    var i = new XSDRItalic();
-
-                                    i.Subelements.Add(new XSDRTextElement(e2.InnerText));
-
-                                    p.Subelements.Add(i);
-                                }
-                            }
-
-                            s.Subelements.Add(p);
-                        }
-                        if (e.Name == "h1" || e.Name == "heading1")
-                        {
-                            var h1 = new XSDRHeading();
-
-                            h1.Subelements.Add(new XSDRTextElement(e.InnerText));
-
-                            s.Subelements.Add(h1);
-                        }
-                    }
-                }
+                s.Subelements = GetPageElementsFromXML(section.ChildNodes);
 
                 document.Sections.Add(s);
             }
@@ -76,5 +41,54 @@ namespace XSDR
             return document;
         }
 
+        private IList<IXSDRPageElement> GetPageElementsFromXML(XmlNodeList xmlNodes)
+        {
+            var elements = new List<IXSDRPageElement>();
+
+            foreach (XmlNode xmlNode in xmlNodes)
+            {
+                elements.Add(GetPageElementFromXML(xmlNode));
+            }
+
+            return elements;
+        }
+
+        private IXSDRPageElement GetPageElementFromXML(XmlNode xmlNode)
+        {
+            if (xmlNode.NodeType == XmlNodeType.Text)
+            {
+                return new XSDRTextElement(xmlNode.InnerText);
+            }
+            if (xmlNode.NodeType == XmlNodeType.Element)
+            {
+                if (xmlNode.Name == "p" || xmlNode.Name == "paragraph")
+                {
+                    var p = new XSDRParagraph();
+
+                    p.Subelements = GetPageElementsFromXML(xmlNode.ChildNodes);
+
+                    return p;
+                }
+                if (xmlNode.Name == "i" || xmlNode.Name == "italic")
+                {
+                    var i = new XSDRItalic();
+
+                    i.Subelements = GetPageElementsFromXML(xmlNode.ChildNodes);
+
+                    return i;
+                }
+                if (xmlNode.Name == "h1" || xmlNode.Name == "heading1")
+                {
+                    var h1 = new XSDRHeading();
+
+                    h1.Level = 1;
+                    h1.Subelements = GetPageElementsFromXML(xmlNode.ChildNodes);
+
+                    return h1;
+                }
+            }
+
+            throw new NotImplementedException();
+        }
     }
 }
