@@ -50,6 +50,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WordExporter.cs" />
     <Compile Include="XMLImporter.cs" />
+    <Compile Include="XSDRBold.cs" />
     <Compile Include="XSDRContentElement.cs" />
     <Compile Include="XSDRContributor.cs" />
     <Compile Include="XSDRContributorType.cs" />
@@ -59,8 +60,10 @@
     <Compile Include="XSDRPageTemplate.cs" />
     <Compile Include="XSDRParagraph.cs" />
     <Compile Include="XSDRSection.cs" />
+    <Compile Include="XSDRStrikethrough.cs" />
     <Compile Include="XSDRTemplate.cs" />
     <Compile Include="XSDRTextElement.cs" />
+    <Compile Include="XSDRUnderline.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

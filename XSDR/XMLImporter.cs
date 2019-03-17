@@ -77,14 +77,81 @@ namespace XSDR
 
                     return i;
                 }
-                if (xmlNode.Name == "h1" || xmlNode.Name == "heading1")
+                if (xmlNode.Name == "b" || xmlNode.Name == "bold")
                 {
-                    var h1 = new XSDRHeading();
+                    var b = new XSDRBold();
 
-                    h1.Level = 1;
-                    h1.Subelements = GetPageElementsFromXML(xmlNode.ChildNodes);
+                    b.Subelements = GetPageElementsFromXML(xmlNode.ChildNodes);
 
-                    return h1;
+                    return b;
+                }
+                if (xmlNode.Name == "u" || xmlNode.Name == "underline")
+                {
+                    var u = new XSDRUnderline();
+
+                    u.Subelements = GetPageElementsFromXML(xmlNode.ChildNodes);
+
+                    return u;
+                }
+                if (xmlNode.Name == "s" || xmlNode.Name == "strikethrough")
+                {
+                    var s = new XSDRStrikethrough();
+
+                    s.Subelements = GetPageElementsFromXML(xmlNode.ChildNodes);
+
+                    return s;
+                }
+                if ((new string[] { "h1", "h2", "h3", "h4", "h5", "h6", "h7", "h8", "h9", "h10", "heading1", "heading2", "heading3", "heading4", "heading5", "heading6", "heading7", "heading8", "heading9", "heading10" }).Any(t => t == xmlNode.Name))
+                {
+                    var h = new XSDRHeading();
+
+                    switch (xmlNode.Name)
+                    {
+                        case "h1":
+                        case "heading1":
+                            h.Level = 1;
+                            break;
+                        case "h2":
+                        case "heading2":
+                            h.Level = 2;
+                            break;
+                        case "h3":
+                        case "heading3":
+                            h.Level = 3;
+                            break;
+                        case "h4":
+                        case "heading4":
+                            h.Level = 4;
+                            break;
+                        case "h5":
+                        case "heading5":
+                            h.Level = 5;
+                            break;
+                        case "h6":
+                        case "heading6":
+                            h.Level = 6;
+                            break;
+                        case "h7":
+                        case "heading7":
+                            h.Level = 7;
+                            break;
+                        case "h8":
+                        case "heading8":
+                            h.Level = 8;
+                            break;
+                        case "h9":
+                        case "heading9":
+                            h.Level = 9;
+                            break;
+                        case "h10":
+                        case "heading10":
+                            h.Level = 10;
+                            break;
+                    }
+
+                    h.Subelements = GetPageElementsFromXML(xmlNode.ChildNodes);
+
+                    return h;
                 }
             }
 
