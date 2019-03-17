@@ -57,6 +57,7 @@
     <Compile Include="XSDRDocument.cs" />
     <Compile Include="XSDRHeading.cs" />
     <Compile Include="XSDRItalic.cs" />
+    <Compile Include="XSDRPageBreak.cs" />
     <Compile Include="XSDRPageTemplate.cs" />
     <Compile Include="XSDRParagraph.cs" />
     <Compile Include="XSDRSection.cs" />

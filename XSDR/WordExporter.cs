@@ -33,7 +33,7 @@ namespace XSDR
                 {
                     foreach (var e1 in s.Subelements)
                     {
-                        if (e1 is XSDRParagraph || e1 is XSDRHeading)
+                        if (e1 is XSDRParagraph || e1 is XSDRHeading )
                         {
                             var paragraph = body.AppendChild(new Paragraph());
 
@@ -64,7 +64,7 @@ namespace XSDR
                                     var text = ((e2 as XSDRBold).Subelements[0] as XSDRTextElement).Text;
 
                                     var run = paragraph.AppendChild(new Run());
-                                    var runProperties = new RunProperties(new RunFonts() { Ascii = _defaultFontName }, _getFontSize(_defaultFontHeight),  new Bold());
+                                    var runProperties = new RunProperties(new RunFonts() { Ascii = _defaultFontName }, _getFontSize(_defaultFontHeight), new Bold());
 
                                     run.PrependChild(runProperties);
                                     run.AppendChild(new Text() { Text = text, Space = SpaceProcessingModeValues.Preserve });
@@ -74,7 +74,7 @@ namespace XSDR
                                     var text = ((e2 as XSDRUnderline).Subelements[0] as XSDRTextElement).Text;
 
                                     var run = paragraph.AppendChild(new Run());
-                                    var runProperties = new RunProperties(new RunFonts() { Ascii = _defaultFontName }, _getFontSize(_defaultFontHeight), new  Underline());
+                                    var runProperties = new RunProperties(new RunFonts() { Ascii = _defaultFontName }, _getFontSize(_defaultFontHeight), new Underline());
 
                                     run.PrependChild(runProperties);
                                     run.AppendChild(new Text() { Text = text, Space = SpaceProcessingModeValues.Preserve });
@@ -89,7 +89,15 @@ namespace XSDR
                                     run.PrependChild(runProperties);
                                     run.AppendChild(new Text() { Text = text, Space = SpaceProcessingModeValues.Preserve });
                                 }
+                              
                             }
+                        }
+                        if (e1 is XSDRPageBreak)
+                        {
+                            var paragraph = body.AppendChild(new Paragraph());
+                            var run = paragraph.AppendChild(new Run());
+
+                            run.AppendChild(new Break() { Type = BreakValues.Page });
                         }
                     }
                 }

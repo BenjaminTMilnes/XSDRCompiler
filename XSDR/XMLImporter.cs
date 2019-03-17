@@ -153,6 +153,12 @@ namespace XSDR
 
                     return h;
                 }
+                if (xmlNode.Name == "pb" || xmlNode.Name == "page-break")
+                {
+                    var pb = new XSDRPageBreak();
+
+                    return pb;
+                }
             }
 
             throw new NotImplementedException();
