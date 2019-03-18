@@ -19,11 +19,11 @@ namespace XSDR
             return new FontSize() { Val = (fontHeight * 2).ToString() };
         }
 
-             private  int ConvertFromMillimetres(double mm)
+        private int ConvertFromMillimetres(double mm)
         {
             return (int)Math.Round(mm * 72 * 20 / 25.4);
         }
-        
+
         public void ExportXSDRDocument(XSDRDocument document, string filePath)
         {
             OpenSettings openSettings = new OpenSettings();
@@ -36,14 +36,17 @@ namespace XSDR
 
                 mainPart.Document = new Document();
 
+                var header = mainPart.AddNewPart<HeaderPart>();
+                var footer = mainPart.AddNewPart<FooterPart>();
+
                 var body = mainPart.Document.AppendChild(new Body());
 
                 var sectionProperties = new SectionProperties();
                 var pageSize = new PageSize();
-                pageSize.Width = (uint) ConvertFromMillimetres(128.5);
+                pageSize.Width = (uint)ConvertFromMillimetres(128.5);
                 pageSize.Height = (uint)ConvertFromMillimetres(198.4);
 
-                var pageMargin = new PageMargin() { Top =  ConvertFromMillimetres(20), Bottom = ConvertFromMillimetres(20), Left = (uint) ConvertFromMillimetres(20), Right = (uint) ConvertFromMillimetres(20) };
+                var pageMargin = new PageMargin() { Top = ConvertFromMillimetres(20), Bottom = ConvertFromMillimetres(20), Left = (uint)ConvertFromMillimetres(20), Right = (uint)ConvertFromMillimetres(20) };
 
                 sectionProperties.Append(pageSize);
                 sectionProperties.Append(pageMargin);
@@ -89,7 +92,6 @@ namespace XSDR
 
                                     AddRunToParagraph(paragraph, text, _defaultFontName, _defaultFontHeight, false, false, false, true);
                                 }
-
                             }
                         }
                         if (e1 is XSDRPageBreak)
