@@ -4,28 +4,37 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.IO;
+using DSS;
 
 namespace XSDR
 {
     public class XMLImporter
     {
-        public XSDRDocument ImportDocument(string filePath)
+        private DSSImporter _dssImporter;
+
+          public XMLImporter()
         {
-            var document = new XSDRDocument();
+            _dssImporter = new DSSImporter();
+        }
+
+        public XSDRDocument ImportDocument(string xmlFilePath, string dssFilePath = "")
+        {
+            var xsdrDocument = new XSDRDocument();
 
             var xmlDocument = new XmlDocument();
 
-            xmlDocument.Load(filePath);
+            xmlDocument.Load(xmlFilePath);
 
             var version = xmlDocument.SelectSingleNode("/document").Attributes["version"].Value;
             var title = xmlDocument.SelectSingleNode("/document/title").InnerText;
             var subtitle = xmlDocument.SelectSingleNode("/document/subtitle").InnerText;
             var keywords = xmlDocument.SelectSingleNode("/document/keywords").InnerText;
 
-            document.Version = version;
-            document.Title = title;
-            document.Subtitle = subtitle;
-            document.Keywords = keywords.Split(',').Select(s => s.Trim());
+            xsdrDocument.Version = version;
+            xsdrDocument.Title = title;
+            xsdrDocument.Subtitle = subtitle;
+            xsdrDocument.Keywords = keywords.Split(',').Select(s => s.Trim());
 
             var sections = xmlDocument.SelectNodes("/document/sections/section");
 
@@ -35,10 +44,16 @@ namespace XSDR
 
                 s.Subelements = GetPageElementsFromXML(section.ChildNodes);
 
-                document.Sections.Add(s);
+                xsdrDocument.Sections.Add(s);
             }
 
-            return document;
+            if (dssFilePath != "")
+            {
+                var dss = File.ReadAllText(dssFilePath);
+                var dssDocument = _dssImporter.ImportDocument(dss);
+            }
+
+            return xsdrDocument;
         }
 
         private IList<IXSDRPageElement> GetPageElementsFromXML(XmlNodeList xmlNodes)

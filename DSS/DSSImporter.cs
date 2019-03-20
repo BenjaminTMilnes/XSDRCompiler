@@ -238,7 +238,7 @@ namespace DSS
         {
             for (var i = marker.Position; i < dss.Length; i++)
             {
-                if (" \t\n".Any(c => c.ToString() == dss.Substring(i, 1)))
+                if (" \t\r\n".Any(c => c.ToString() == dss.Substring(i, 1)))
                 {
                     marker.Position += 1;
                 }
