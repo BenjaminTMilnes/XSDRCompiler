@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XSDR.Examples", "..\XSDR.Ex
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSS", "..\DSS\DSS.csproj", "{71747981-5561-431C-934F-938B4B5D12B2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSS.Tests", "..\DSS.Tests\DSS.Tests.csproj", "{60CB5D48-9A11-449A-8EDA-B88E01A3CB97}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{71747981-5561-431C-934F-938B4B5D12B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71747981-5561-431C-934F-938B4B5D12B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71747981-5561-431C-934F-938B4B5D12B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60CB5D48-9A11-449A-8EDA-B88E01A3CB97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60CB5D48-9A11-449A-8EDA-B88E01A3CB97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60CB5D48-9A11-449A-8EDA-B88E01A3CB97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60CB5D48-9A11-449A-8EDA-B88E01A3CB97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
