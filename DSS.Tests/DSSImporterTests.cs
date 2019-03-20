@@ -288,5 +288,103 @@ namespace DSS.Tests
 
             Assert.AreEqual(0, styleRule.Properties.Count);
         }
+
+        [TestMethod]
+        public void GetSelectorTest1()
+        {
+            var dss = "h1";
+            var styleRule = new DSSStyleRule();
+            var marker = new Marker();
+
+            _dssImporter.GetSelectors(dss, styleRule, marker);
+
+            Assert.AreEqual(1, styleRule.Selectors.Count);
+            Assert.AreEqual("h1", (styleRule.Selectors[0] as DSSElementNameSelector).ElementName);
+        }
+
+        [TestMethod]
+        public void GetSelectorTest2()
+        {
+            var dss = "   h1";
+            var styleRule = new DSSStyleRule();
+            var marker = new Marker();
+
+            _dssImporter.GetSelectors(dss, styleRule, marker);
+
+            Assert.AreEqual(1, styleRule.Selectors.Count);
+            Assert.AreEqual("h1", (styleRule.Selectors[0] as DSSElementNameSelector).ElementName);
+        }
+
+        [TestMethod]
+        public void GetSelectorTest3()
+        {
+            var dss = ".bluebox";
+            var styleRule = new DSSStyleRule();
+            var marker = new Marker();
+
+            _dssImporter.GetSelectors(dss, styleRule, marker);
+
+            Assert.AreEqual(1, styleRule.Selectors.Count);
+            Assert.AreEqual("bluebox", (styleRule.Selectors[0] as DSSClassSelector).Class);
+        }
+
+        [TestMethod]
+        public void GetSelectorTest4()
+        {
+            var dss = "   .bluebox   ";
+            var styleRule = new DSSStyleRule();
+            var marker = new Marker();
+
+            _dssImporter.GetSelectors(dss, styleRule, marker);
+
+            Assert.AreEqual(1, styleRule.Selectors.Count);
+            Assert.AreEqual("bluebox", (styleRule.Selectors[0] as DSSClassSelector).Class);
+        }
+
+        [TestMethod]
+        public void GetSelectorTest5()
+        {
+            var dss = "h1.bluebox";
+            var styleRule = new DSSStyleRule();
+            var marker = new Marker();
+
+            _dssImporter.GetSelectors(dss, styleRule, marker);
+
+            Assert.AreEqual(2, styleRule.Selectors.Count);
+            Assert.AreEqual("h1", (styleRule.Selectors[0] as DSSElementNameSelector).ElementName);
+            Assert.AreEqual("bluebox", (styleRule.Selectors[1] as DSSClassSelector).Class);
+        }
+
+        [TestMethod]
+        public void GetSelectorTest6()
+        {
+            var dss = "h1.bluebox.redbox";
+            var styleRule = new DSSStyleRule();
+            var marker = new Marker();
+
+            _dssImporter.GetSelectors(dss, styleRule, marker);
+
+            Assert.AreEqual(3, styleRule.Selectors.Count);
+            Assert.AreEqual("h1", (styleRule.Selectors[0] as DSSElementNameSelector).ElementName);
+            Assert.AreEqual("bluebox", (styleRule.Selectors[1] as DSSClassSelector).Class);
+            Assert.AreEqual("redbox", (styleRule.Selectors[2] as DSSClassSelector).Class);
+        }
+
+        [TestMethod]
+        public void GetDocumentTest1()
+        {
+            var dss = "   h1 { font-height: 12pt; font-family: Garamond; } \n p { font-height: 12pt; font-family: Garamond;    }";
+            var document = _dssImporter.ImportDocument(dss);
+
+            Assert.AreEqual(2, document.StyleRules.Count);
+            Assert.AreEqual(1, document.StyleRules[0].Selectors.Count);
+            Assert.AreEqual("h1", (document.StyleRules[0].Selectors[0] as DSSElementNameSelector).ElementName);
+            Assert.AreEqual(2, document.StyleRules[0].Properties.Count);
+            Assert.AreEqual(1, document.StyleRules[1].Selectors.Count);
+            Assert.AreEqual("p", (document.StyleRules[1].Selectors[0] as DSSElementNameSelector).ElementName);
+            Assert.AreEqual(2, document.StyleRules[1].Properties.Count);
+            Assert.AreEqual("font-height", document.StyleRules[1].Properties[0].Name);
+            Assert.AreEqual("12pt", document.StyleRules[1].Properties[0].Value);
+        }
     }
 }

@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DSSClassSelector.cs" />
+    <Compile Include="DSSDocument.cs" />
     <Compile Include="DSSElementNameSelector.cs" />
     <Compile Include="DSSImporter.cs" />
     <Compile Include="IDSSSelector.cs" />

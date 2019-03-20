@@ -13,11 +13,58 @@ namespace DSS
 
     public class DSSImporter
     {
-        public void GetStyleRule(string dss, IList<DSSStyleRule> container, Marker marker)
+        public DSSDocument ImportDocument(string dss)
+        {
+            var document = new DSSDocument();
+            var marker = new Marker();
+
+            var i = -1;
+
+            while (marker.Position != i)
+            {
+                i = marker.Position;
+
+                GetStyleRule(dss, document, marker);
+            }
+
+            return document;
+        }
+
+        public void GetStyleRule(string dss, DSSDocument container, Marker marker)
         {
             if (marker.Position >= dss.Length)
             {
                 return;
+            }
+
+            var styleRule = new DSSStyleRule();
+
+            GetSelectors(dss, styleRule, marker);
+            GetProperties(dss, styleRule, marker);
+
+            if (styleRule.Selectors.Any() && styleRule.Properties.Any())
+            {
+                container.StyleRules.Add(styleRule);
+            }
+        }
+
+        public void GetSelectors(string dss, DSSStyleRule container, Marker marker)
+        {
+            if (marker.Position >= dss.Length)
+            {
+                return;
+            }
+
+            GetWhitespace(dss, marker);
+
+            var i = -1;
+
+            while (marker.Position != i)
+            {
+                i = marker.Position;
+
+                GetElementNameSelector(dss, container, marker);
+                GetClassSelector(dss, container, marker);
             }
         }
 
