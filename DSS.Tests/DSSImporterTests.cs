@@ -206,5 +206,87 @@ namespace DSS.Tests
 
             Assert.AreEqual(0, styleRule.Selectors.Count);
         }
+
+        [TestMethod]
+        public void GetProperties1()
+        {
+            var dss = "   {   page-width: 20cm; page-height: 30cm;   }   ";
+            var styleRule = new DSSStyleRule();
+            var marker = new Marker();
+
+            _dssImporter.GetProperties(dss, styleRule, marker);
+
+            Assert.AreEqual(2, styleRule.Properties.Count);
+            Assert.AreEqual("page-width", styleRule.Properties[0].Name);
+            Assert.AreEqual("20cm", styleRule.Properties[0].Value);
+            Assert.AreEqual("page-height", styleRule.Properties[1].Name);
+            Assert.AreEqual("30cm", styleRule.Properties[1].Value);
+        }
+
+        [TestMethod]
+        public void GetProperties2()
+        {
+            var dss = "   {   page-width: 20cm; page-height: 30cm;   font-height   :   10pt;   }   ";
+            var styleRule = new DSSStyleRule();
+            var marker = new Marker();
+
+            _dssImporter.GetProperties(dss, styleRule, marker);
+
+            Assert.AreEqual(3, styleRule.Properties.Count);
+            Assert.AreEqual("page-width", styleRule.Properties[0].Name);
+            Assert.AreEqual("20cm", styleRule.Properties[0].Value);
+            Assert.AreEqual("page-height", styleRule.Properties[1].Name);
+            Assert.AreEqual("30cm", styleRule.Properties[1].Value);
+            Assert.AreEqual("font-height", styleRule.Properties[2].Name);
+            Assert.AreEqual("10pt", styleRule.Properties[2].Value);
+        }
+
+        [TestMethod]
+        public void GetProperties3()
+        {
+            var dss = "   {   }   page-width: 20cm; page-height: 30cm;   font-height   :   10pt;   }   ";
+            var styleRule = new DSSStyleRule();
+            var marker = new Marker();
+
+            _dssImporter.GetProperties(dss, styleRule, marker);
+
+            Assert.AreEqual(0, styleRule.Properties.Count);
+        }
+
+        [TestMethod]
+        public void GetProperties4()
+        {
+            var dss = "   {   ;   page-width: 20cm; page-height: 30cm;   font-height   :   10pt;   }   ";
+            var styleRule = new DSSStyleRule();
+            var marker = new Marker();
+
+            _dssImporter.GetProperties(dss, styleRule, marker);
+
+            Assert.AreEqual(0, styleRule.Properties.Count);
+        }
+
+        [TestMethod]
+        public void GetProperties5()
+        {
+            var dss = "   page-width: 20cm; page-height: 30cm;   font-height   :   10pt;   }   ";
+            var styleRule = new DSSStyleRule();
+            var marker = new Marker();
+
+            _dssImporter.GetProperties(dss, styleRule, marker);
+
+            Assert.AreEqual(0, styleRule.Properties.Count);
+        }
+
+        [TestMethod]
+        public void GetProperties6()
+        {
+            var dss = "   {{   page-width: 20cm; page-height: 30cm;   font-height   :   10pt;   }   ";
+            var styleRule = new DSSStyleRule();
+            var marker = new Marker();
+
+            _dssImporter.GetProperties(dss, styleRule, marker);
+
+            Assert.AreEqual(0, styleRule.Properties.Count);
+        }
     }
 }

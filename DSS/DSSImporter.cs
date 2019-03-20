@@ -21,7 +21,7 @@ namespace DSS
             }
         }
 
-        public void       GetElementNameSelector(string dss, DSSStyleRule container, Marker marker)
+        public void GetElementNameSelector(string dss, DSSStyleRule container, Marker marker)
         {
             if (marker.Position >= dss.Length)
             {
@@ -29,7 +29,7 @@ namespace DSS
             }
 
             var elementName = "";
-            
+
             for (var i = marker.Position; i < dss.Length; i++)
             {
                 if ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_0123456789".Any(c => c.ToString() == dss.Substring(i, 1)))
@@ -42,17 +42,17 @@ namespace DSS
                 }
             }
 
-              if (elementName.Length < 1)
+            if (elementName.Length < 1)
             {
                 return;
             }
 
             marker.Position += elementName.Length;
 
-            container.Selectors.Add(new   DSSElementNameSelector(elementName));
+            container.Selectors.Add(new DSSElementNameSelector(elementName));
         }
 
-        public void  GetClassSelector (string dss, DSSStyleRule    container, Marker marker)
+        public void GetClassSelector(string dss, DSSStyleRule container, Marker marker)
         {
             if (marker.Position >= dss.Length)
             {
@@ -68,7 +68,7 @@ namespace DSS
 
             marker.Position += 1;
 
-              for (var i = marker.Position; i < dss.Length; i++)
+            for (var i = marker.Position; i < dss.Length; i++)
             {
                 if ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_0123456789".Any(c => c.ToString() == dss.Substring(i, 1)))
                 {
@@ -83,6 +83,55 @@ namespace DSS
             marker.Position += className.Length;
 
             container.Selectors.Add(new DSSClassSelector(className));
+        }
+
+        public void GetProperties(string dss, DSSStyleRule container, Marker marker)
+        {
+            if (marker.Position >= dss.Length)
+            {
+                return;
+            }
+
+            var i = -1;
+            var haveHadOpeningBracket = false;
+            var haveHadClosingBracket = false;
+
+            while (marker.Position != i)
+            {
+                i = marker.Position;
+
+                GetWhitespace(dss, marker);
+
+                if (!haveHadOpeningBracket)
+                {
+                    if (dss.Substring(marker.Position, 1) == "{")
+                    {
+                        haveHadOpeningBracket = true;
+                        marker.Position += 1;
+                    }
+                }
+                else
+                {
+                    if (dss.Substring(marker.Position, 1) == "{")
+                    {
+                        break;
+                    }
+
+                    GetWhitespace(dss, marker);
+                    GetProperty(dss, container, marker);
+                    GetWhitespace(dss, marker);
+
+                    if (!haveHadClosingBracket)
+                    {
+                        if (dss.Substring(marker.Position, 1) == "}")
+                        {
+                            haveHadClosingBracket = true;
+                            marker.Position += 1;
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
         public void GetProperty(string dss, DSSStyleRule container, Marker marker)
@@ -136,6 +185,21 @@ namespace DSS
             var property = new DSSProperty(propertyName.Trim(), propertyValue.Trim());
 
             container.Properties.Add(property);
+        }
+
+        public void GetWhitespace(string dss, Marker marker)
+        {
+            for (var i = marker.Position; i < dss.Length; i++)
+            {
+                if (" \t\n".Any(c => c.ToString() == dss.Substring(i, 1)))
+                {
+                    marker.Position += 1;
+                }
+                else
+                {
+                    return;
+                }
+            }
         }
     }
 }
