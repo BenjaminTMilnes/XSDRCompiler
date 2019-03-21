@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace XSDR
 {
-    public class XSDRBold : XSDRContentElement
+    public class XSDRCalculatedStyle
     {
-        public XSDRBold()
-        {
-            ElementNames = new string[] { "bold", "b" };
-        }
+        public string FontName { get; set; }
+        public double FontHeight { get; set; }
     }
 }

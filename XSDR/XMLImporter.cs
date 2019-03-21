@@ -13,7 +13,7 @@ namespace XSDR
     {
         private DSSImporter _dssImporter;
 
-          public XMLImporter()
+        public XMLImporter()
         {
             _dssImporter = new DSSImporter();
         }
@@ -118,51 +118,53 @@ namespace XSDR
                 }
                 if ((new string[] { "h1", "h2", "h3", "h4", "h5", "h6", "h7", "h8", "h9", "h10", "heading1", "heading2", "heading3", "heading4", "heading5", "heading6", "heading7", "heading8", "heading9", "heading10" }).Any(t => t == xmlNode.Name))
                 {
-                    var h = new XSDRHeading();
+                    var level = 0;
 
                     switch (xmlNode.Name)
                     {
                         case "h1":
                         case "heading1":
-                            h.Level = 1;
+                            level = 1;
                             break;
                         case "h2":
                         case "heading2":
-                            h.Level = 2;
+                            level = 2;
                             break;
                         case "h3":
                         case "heading3":
-                            h.Level = 3;
+                            level = 3;
                             break;
                         case "h4":
                         case "heading4":
-                            h.Level = 4;
+                            level = 4;
                             break;
                         case "h5":
                         case "heading5":
-                            h.Level = 5;
+                            level = 5;
                             break;
                         case "h6":
                         case "heading6":
-                            h.Level = 6;
+                            level = 6;
                             break;
                         case "h7":
                         case "heading7":
-                            h.Level = 7;
+                            level = 7;
                             break;
                         case "h8":
                         case "heading8":
-                            h.Level = 8;
+                            level = 8;
                             break;
                         case "h9":
                         case "heading9":
-                            h.Level = 9;
+                            level = 9;
                             break;
                         case "h10":
                         case "heading10":
-                            h.Level = 10;
+                            level = 10;
                             break;
                     }
+
+                    var h = new XSDRHeading(level);
 
                     h.Subelements = GetPageElementsFromXML(xmlNode.ChildNodes);
 

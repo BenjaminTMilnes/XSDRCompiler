@@ -8,5 +8,9 @@ namespace XSDR
 {
     public class XSDRStrikethrough : XSDRContentElement
     {
+        public XSDRStrikethrough()
+        {
+            ElementNames = new string[] { "strikethrough", "s" };
+        }
     }
 }

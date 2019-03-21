@@ -8,5 +8,9 @@ namespace XSDR
 {
     public class XSDRUnderline : XSDRContentElement
     {
+        public XSDRUnderline()
+        {
+            ElementNames = new string[] { "underline", "u" };
+        }
     }
 }

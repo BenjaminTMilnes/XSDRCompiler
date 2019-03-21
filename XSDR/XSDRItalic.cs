@@ -8,5 +8,9 @@ namespace XSDR
 {
     public class XSDRItalic : XSDRContentElement
     {
+        public XSDRItalic()
+        {
+            ElementNames = new string[] { "italic", "i" };
+        }
     }
 }

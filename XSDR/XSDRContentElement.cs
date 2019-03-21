@@ -8,11 +8,17 @@ namespace XSDR
 {
     public abstract class XSDRContentElement : IXSDRPageElement
     {
-            public IList<IXSDRPageElement> Subelements { get; set; }
+        public string[] ElementNames { get; protected set; }
+        public IList<IXSDRPageElement> Subelements { get; set; }
 
-          public XSDRContentElement()
+        public string Class { get; set; }
+
+        public XSDRCalculatedStyle CalculatedStyle { get; set; }
+
+        public XSDRContentElement()
         {
             Subelements = new List<IXSDRPageElement>();
+            CalculatedStyle = new XSDRCalculatedStyle();
         }
     }
 }

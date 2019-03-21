@@ -8,5 +8,9 @@ namespace XSDR
 {
     public class XSDRParagraph : XSDRContentElement
     {
+        public XSDRParagraph()
+        {
+            ElementNames = new string[] { "paragraph", "p" };
+        }
     }
 }
