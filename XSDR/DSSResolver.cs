@@ -52,6 +52,10 @@ namespace XSDR
                     {
                         element.CalculatedStyle.FontHeight = XSDRLength.FromText(property.Value);
                     }
+                    if (property.Name == "paragraph-indentation")
+                    {
+                        element.CalculatedStyle.ParagraphIndentation = XSDRLength.FromText(property.Value);
+                    }
                 }
             }
 

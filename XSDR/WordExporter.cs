@@ -58,7 +58,13 @@ namespace XSDR
                     {
                         if (e1 is XSDRParagraph || e1 is XSDRHeading)
                         {
-                            var paragraph = body.AppendChild(new Paragraph());
+                            var paragraphProperties = new ParagraphProperties();
+
+                            paragraphProperties.Append(new Indentation() { Hanging = (e1 as XSDRContentElement).CalculatedStyle.ParagraphIndentation.Times(-1).MSWUnits.ToString() });
+                            
+                            paragraphProperties.Append(new Justification() { Val = JustificationValues.Both });
+
+                            var paragraph = body.AppendChild(new Paragraph(paragraphProperties));
 
                             foreach (var e2 in (e1 as XSDRContentElement).Subelements)
                             {
@@ -72,7 +78,7 @@ namespace XSDR
                                 {
                                     var text = ((e2 as XSDRItalic).Subelements[0] as XSDRTextElement).Text;
 
-                                    AddRunToParagraph(paragraph, text, _defaultFontName, (int) Math.Round((e2 as XSDRItalic).CalculatedStyle.FontHeight.Points), true);
+                                    AddRunToParagraph(paragraph, text, _defaultFontName, (int)Math.Round((e2 as XSDRItalic).CalculatedStyle.FontHeight.Points), true);
                                 }
                                 if (e2 is XSDRBold)
                                 {

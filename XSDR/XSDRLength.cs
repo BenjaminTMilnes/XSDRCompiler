@@ -11,6 +11,31 @@ namespace XSDR
     {
         private double _points;
 
+        public static XSDRLength operator +(XSDRLength length1, XSDRLength length2)
+        {
+            return new XSDRLength(length1.Points + length2.Points);
+        }
+
+        public static XSDRLength operator -(XSDRLength length1, XSDRLength length2)
+        {
+            return new XSDRLength(length1.Points - length2.Points);
+        }
+
+        public static XSDRLength operator *(XSDRLength length1, double scalar1)
+        {
+            return new XSDRLength(length1.Points * scalar1);
+        }
+
+        public static XSDRLength operator *(double scalar1, XSDRLength length1)
+        {
+            return length1 * scalar1;
+        }
+
+        public XSDRLength Times(double scalar)
+        {
+            return this * scalar;
+        }
+
         public double MSWUnits
         {
             get { return _points * 20.0; }
@@ -57,6 +82,13 @@ namespace XSDR
         {
             get { return Decimetres / 10.0; }
             set { Decimetres = value * 10.0; }
+        }
+
+        public XSDRLength() { }
+
+        public XSDRLength(double points)
+        {
+            _points = points;
         }
 
         public static XSDRLength FromText(string text)

@@ -14,10 +14,11 @@
   </templates>
   <sections>
     <section page-template-reference="main">
-      <h1>
-        <u>Introduction</u>
-      </h1>
-      <p>Grumpy wizards make <b>toxic</b> brew for the Evil <s>King</s> Queen and Jack. The <i>quick</i> brown fox jumps over the lazy dog.</p>
+      <h1>An introduction to quick brown foxes and grumpy wizards</h1>
+      <p>Grumpy wizards make <b>toxic</b> brew for the <i>Evil Queen</i> and Jack. <s>The quick brown fox jumps over the lazy dog.</s>
+    </p>
+      <h2>Did you ever hear the tragedy of Darth Plagueis the Wise?</h2>
+      <p>I thought not. It's not a story the Jedi would teach you.</p>
       <pb/>
       <p>This text should be on the next page.</p>
     </section>
