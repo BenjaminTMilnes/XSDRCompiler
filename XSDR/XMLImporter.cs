@@ -51,6 +51,10 @@ namespace XSDR
             {
                 var dss = File.ReadAllText(dssFilePath);
                 var dssDocument = _dssImporter.ImportDocument(dss);
+
+                var dssResolver = new DSSResolver();
+
+                dssResolver.ResolveDSS(dssDocument, xsdrDocument);
             }
 
             return xsdrDocument;

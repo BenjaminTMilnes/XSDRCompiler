@@ -10,5 +10,11 @@ namespace XSDR
     {
         public string FontName { get; set; }
         public XSDRLength FontHeight { get; set; }
+
+        public XSDRCalculatedStyle()
+        {
+            FontName = "Times New Roman";
+            FontHeight = XSDRLength.FromText("10pt");
+        }
     }
 }

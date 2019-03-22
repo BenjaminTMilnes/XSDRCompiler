@@ -17,6 +17,7 @@ namespace XSDR
 
         public XSDRContentElement()
         {
+            ElementNames = new string[] { };
             Subelements = new List<IXSDRPageElement>();
             CalculatedStyle = new XSDRCalculatedStyle();
         }

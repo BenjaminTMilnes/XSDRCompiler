@@ -35,7 +35,7 @@ namespace XSDR
         {
             var isMatchingElement = false;
 
-            if (styleRule.Selectors.Any() && styleRule.Selectors[0] is DSSElementNameSelector && element.ElementNames.Any(name => name == (styleRule.Selectors[0] as DSSElementNameSelector).ElementName))
+            if (styleRule.Selectors.Any() && styleRule.Selectors[0] is DSSElementNameSelector && element.ElementNames.Any() && element.ElementNames.Any(name => name == (styleRule.Selectors[0] as DSSElementNameSelector).ElementName))
             {
                 isMatchingElement = true;
             }

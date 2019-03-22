@@ -4,3 +4,19 @@ body {
  page-width: 128.5mm;
  page-height: 198.4mm;
 }
+
+i {
+ font-height: 24pt;
+}
+
+b {
+ font-height: 18pt;
+}
+
+u {
+ font-height: 14pt;
+}
+
+s {
+ font-height: 10pt;
+}

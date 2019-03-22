@@ -72,25 +72,25 @@ namespace XSDR
                                 {
                                     var text = ((e2 as XSDRItalic).Subelements[0] as XSDRTextElement).Text;
 
-                                    AddRunToParagraph(paragraph, text, _defaultFontName, _defaultFontHeight, true);
+                                    AddRunToParagraph(paragraph, text, _defaultFontName, (int) Math.Round((e2 as XSDRItalic).CalculatedStyle.FontHeight.Points), true);
                                 }
                                 if (e2 is XSDRBold)
                                 {
                                     var text = ((e2 as XSDRBold).Subelements[0] as XSDRTextElement).Text;
 
-                                    AddRunToParagraph(paragraph, text, _defaultFontName, _defaultFontHeight, false, true);
+                                    AddRunToParagraph(paragraph, text, _defaultFontName, (int)Math.Round((e2 as XSDRBold).CalculatedStyle.FontHeight.Points), false, true);
                                 }
                                 if (e2 is XSDRUnderline)
                                 {
                                     var text = ((e2 as XSDRUnderline).Subelements[0] as XSDRTextElement).Text;
 
-                                    AddRunToParagraph(paragraph, text, _defaultFontName, _defaultFontHeight, false, false, true);
+                                    AddRunToParagraph(paragraph, text, _defaultFontName, (int)Math.Round((e2 as XSDRUnderline).CalculatedStyle.FontHeight.Points), false, false, true);
                                 }
                                 if (e2 is XSDRStrikethrough)
                                 {
                                     var text = ((e2 as XSDRStrikethrough).Subelements[0] as XSDRTextElement).Text;
 
-                                    AddRunToParagraph(paragraph, text, _defaultFontName, _defaultFontHeight, false, false, false, true);
+                                    AddRunToParagraph(paragraph, text, _defaultFontName, (int)Math.Round((e2 as XSDRStrikethrough).CalculatedStyle.FontHeight.Points), false, false, false, true);
                                 }
                             }
                         }
