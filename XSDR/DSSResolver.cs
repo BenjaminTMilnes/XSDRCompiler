@@ -50,7 +50,7 @@ namespace XSDR
                     }
                     if (property.Name == "font-height")
                     {
-                        element.CalculatedStyle.FontHeight = double.Parse(property.Value);
+                        element.CalculatedStyle.FontHeight = XSDRLength.FromText(property.Value);
                     }
                 }
             }

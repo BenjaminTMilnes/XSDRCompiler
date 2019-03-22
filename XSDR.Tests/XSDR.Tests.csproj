@@ -50,8 +50,14 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XSDRLengthTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\XSDR\XSDR.csproj">
+      <Project>{535628ca-f8a2-4387-93bb-1a774c285545}</Project>
+      <Name>XSDR</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

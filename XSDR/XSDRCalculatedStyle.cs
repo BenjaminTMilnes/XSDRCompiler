@@ -9,6 +9,6 @@ namespace XSDR
     public class XSDRCalculatedStyle
     {
         public string FontName { get; set; }
-        public double FontHeight { get; set; }
+        public XSDRLength FontHeight { get; set; }
     }
 }

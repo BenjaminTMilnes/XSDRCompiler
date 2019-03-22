@@ -44,19 +44,19 @@ namespace XSDR
         public double Centimetres
         {
             get { return Millimetres / 10.0; }
-            set { Millimetres = value / 10.0; }
+            set { Millimetres = value * 10.0; }
         }
 
         public double Decimetres
         {
             get { return Centimetres / 10.0; }
-            set { Centimetres = value / 10.0; }
+            set { Centimetres = value * 10.0; }
         }
 
         public double Metres
         {
             get { return Decimetres / 10.0; }
-            set { Decimetres = value / 10.0; }
+            set { Decimetres = value * 10.0; }
         }
 
         public static XSDRLength FromText(string text)
@@ -68,7 +68,7 @@ namespace XSDR
             if (m.Success)
             {
                 var magnitude = m.Groups[1].Value;
-                var units = m.Groups[2].Value;
+                var units = m.Groups[3].Value;
 
                 var length = new XSDRLength();
 
