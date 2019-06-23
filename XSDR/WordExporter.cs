@@ -62,50 +62,12 @@ namespace XSDR
                             var paragraphProperties = new ParagraphProperties();
 
                             paragraphProperties.Append(new Indentation() { Hanging = (e1 as XSDRContentElement).CalculatedStyle.ParagraphIndentation.Times(-1).MSWUnits.ToString() });
-                            
+
                             paragraphProperties.Append(new Justification() { Val = JustificationValues.Both });
 
                             var paragraph = body.AppendChild(new Paragraph(paragraphProperties));
 
-                            foreach (var e2 in (e1 as XSDRContentElement).Subelements)
-                            {
-                                if (e2 is XSDRTextElement)
-                                {
-                                    var text = (e2 as XSDRTextElement).Text;
-
-                                    AddRunToParagraph(paragraph, text, _defaultFontName, _defaultFontHeight);
-                                }
-                                if (e2 is XSDRItalic)
-                                {
-                                    var text = ((e2 as XSDRItalic).Subelements[0] as XSDRTextElement).Text;
-
-                                    AddRunToParagraph(paragraph, text, _defaultFontName, (int)Math.Round((e2 as XSDRItalic).CalculatedStyle.FontHeight.Points), true);
-                                }
-                                if (e2 is XSDRBold)
-                                {
-                                    var text = ((e2 as XSDRBold).Subelements[0] as XSDRTextElement).Text;
-
-                                    AddRunToParagraph(paragraph, text, _defaultFontName, (int)Math.Round((e2 as XSDRBold).CalculatedStyle.FontHeight.Points), false, true);
-                                }
-                                if (e2 is XSDRUnderline)
-                                {
-                                    var text = ((e2 as XSDRUnderline).Subelements[0] as XSDRTextElement).Text;
-
-                                    AddRunToParagraph(paragraph, text, _defaultFontName, (int)Math.Round((e2 as XSDRUnderline).CalculatedStyle.FontHeight.Points), false, false, true);
-                                }
-                                if (e2 is XSDRStrikethrough)
-                                {
-                                    var text = ((e2 as XSDRStrikethrough).Subelements[0] as XSDRTextElement).Text;
-
-                                    AddRunToParagraph(paragraph, text, _defaultFontName, (int)Math.Round((e2 as XSDRStrikethrough).CalculatedStyle.FontHeight.Points), false, false, false, true);
-                                }
-                                if (e2 is XSDRCitation)
-                                {
-                                    var text = " [" + (e2 as XSDRCitation).Number  + "]";
-
-                                    AddRunToParagraph(paragraph, text, _defaultFontName, (int)Math.Round((e1 as XSDRContentElement).CalculatedStyle.FontHeight.Points), false, false, false, false);
-                                }
-                            }
+                            ExportXSDRPageElements(body, paragraph, e1 as XSDRContentElement, (e1 as XSDRContentElement).Subelements);
                         }
                         if (e1 is XSDRPageBreak)
                         {
@@ -116,6 +78,66 @@ namespace XSDR
             }
         }
 
+        protected void ExportXSDRPageElements(Body body, Paragraph paragraph, XSDRContentElement container, IEnumerable<IXSDRPageElement> xsdrPageElements)
+        {
+            foreach (var xsdrPageElement in xsdrPageElements)
+            {
+                ExportXSDRPageElement(body, paragraph, container, xsdrPageElement);
+            }
+        }
+
+        protected void ExportXSDRPageElement(Body body, Paragraph paragraph, XSDRContentElement container, IXSDRPageElement xsdrPageElement)
+        {
+            if (xsdrPageElement is XSDRTextElement) { ExportXSDRTextElement(body, paragraph, container, xsdrPageElement as XSDRTextElement); }
+            if (xsdrPageElement is XSDRItalic) { ExportXSDRItalic(body, paragraph, container, xsdrPageElement as XSDRItalic); }
+            if (xsdrPageElement is XSDRBold) { ExportXSDRBold(body, paragraph, container, xsdrPageElement as XSDRBold); }
+            if (xsdrPageElement is XSDRUnderline) { ExportXSDRUnderline(body, paragraph, container, xsdrPageElement as XSDRUnderline); }
+            if (xsdrPageElement is XSDRStrikethrough) { ExportXSDRStrikethrough(body, paragraph, container, xsdrPageElement as XSDRStrikethrough); }
+            if (xsdrPageElement is XSDRCitation) { ExportXSDRCitation(body, paragraph, container, xsdrPageElement as XSDRCitation); }
+        }
+
+        protected void ExportXSDRTextElement(Body body, Paragraph paragraph, XSDRContentElement container, XSDRTextElement xsdrTextElement)
+        {
+            var text = xsdrTextElement.Text;
+
+            AddRunToParagraph(paragraph, text, _defaultFontName, _defaultFontHeight);
+        }
+
+        protected void ExportXSDRItalic(Body body, Paragraph paragraph, XSDRContentElement container, XSDRItalic xsdrItalic)
+        {
+            var text = (xsdrItalic.Subelements[0] as XSDRTextElement).Text;
+
+            AddRunToParagraph(paragraph, text, _defaultFontName, xsdrItalic.CalculatedStyle.FontHeight.Points, true);
+        }
+
+        protected void ExportXSDRBold(Body body, Paragraph paragraph, XSDRContentElement container, XSDRBold xsdrBold)
+        {
+            var text = (xsdrBold.Subelements[0] as XSDRTextElement).Text;
+
+            AddRunToParagraph(paragraph, text, _defaultFontName, xsdrBold.CalculatedStyle.FontHeight.Points, false, true);
+        }
+
+        protected void ExportXSDRUnderline(Body body, Paragraph paragraph, XSDRContentElement container, XSDRUnderline xsdrUnderline)
+        {
+            var text = (xsdrUnderline.Subelements[0] as XSDRTextElement).Text;
+
+            AddRunToParagraph(paragraph, text, _defaultFontName, xsdrUnderline.CalculatedStyle.FontHeight.Points, false, false, true);
+        }
+
+        protected void ExportXSDRStrikethrough(Body body, Paragraph paragraph, XSDRContentElement container, XSDRStrikethrough xsdrStrikethrough)
+        {
+            var text = (xsdrStrikethrough.Subelements[0] as XSDRTextElement).Text;
+
+            AddRunToParagraph(paragraph, text, _defaultFontName, xsdrStrikethrough.CalculatedStyle.FontHeight.Points, false, false, false, true);
+        }
+
+        protected void ExportXSDRCitation(Body body, Paragraph paragraph, XSDRContentElement container, XSDRCitation xsdrCitation)
+        {
+            var text = " [" + xsdrCitation.Number + "]";
+
+            AddRunToParagraph(paragraph, text, _defaultFontName, container.CalculatedStyle.FontHeight.Points, false, false, false, false);
+        }
+
         public void AddPageBreakToBody(Body body)
         {
             var paragraph = body.AppendChild(new Paragraph());
@@ -124,10 +146,10 @@ namespace XSDR
             run.AppendChild(new Break() { Type = BreakValues.Page });
         }
 
-        public void AddRunToParagraph(Paragraph paragraph, string text, string fontName, int fontHeight, bool isItalic = false, bool isBold = false, bool isUnderlined = false, bool isStruckThrough = false)
+        public void AddRunToParagraph(Paragraph paragraph, string text, string fontName, double fontHeight, bool isItalic = false, bool isBold = false, bool isUnderlined = false, bool isStruckThrough = false)
         {
             var run = paragraph.AppendChild(new Run());
-            var runProperties = new RunProperties(new RunFonts() { Ascii = fontName }, _getFontSize(fontHeight));
+            var runProperties = new RunProperties(new RunFonts() { Ascii = fontName }, _getFontSize((int)Math.Round(fontHeight)));
 
             if (isItalic)
             {
