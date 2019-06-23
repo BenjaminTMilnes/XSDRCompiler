@@ -9,18 +9,44 @@
   </contributor>
   <keywords>example, test, something</keywords>
   <abstract>Something, something, something ... dark side. Something, something, something ... complete.</abstract>
+  <bibliography>
+    <references>
+      <reference type="book" name="GreatExpectations">
+        <title>Great Expectations</title>
+        <author>
+          <name>Charles Dickens</name>
+        </author>
+      </reference>
+      <reference type="website" name="Google">
+        <title>Google</title>
+        <url>https://www.google.co.uk</url>
+        <date-accessed>2019.06.23</date-accessed>
+      </reference>
+    </references>
+  </bibliography>
   <templates>
     <page-template reference="main" style="page-size: a4;"></page-template>
   </templates>
   <sections>
     <section page-template-reference="main">
       <h1>An introduction to quick brown foxes and grumpy wizards</h1>
-      <p>Grumpy wizards make <b>toxic</b> brew for the <i>Evil Queen</i> and Jack. <s>The quick brown fox jumps over the lazy dog.</s>
-    </p>
+      <p>
+        Grumpy wizards make <b>toxic</b> brew for the <i>Evil Queen</i> and Jack. <s>The quick brown fox jumps over the lazy dog.</s>
+      </p>
       <h2>Did you ever hear the tragedy of Darth Plagueis the Wise?</h2>
       <p>I thought not. It's not a story the Jedi would teach you.</p>
+      <ol>
+        <li>This is the first list item.</li>
+        <li>This is the second list item.</li>
+      </ol>
       <pb/>
-      <p>This text should be on the next page.</p>
+      <p>
+        This text should be on the next page.<c rn="Google" />
+      </p>
+      <pb/>
+      <p>
+        This text should be on the next page.<c rn="GreatExpectations" />
+      </p>
     </section>
   </sections>
 </document>

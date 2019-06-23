@@ -46,6 +46,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bibliography\XSDRBibliography.cs" />
+    <Compile Include="Bibliography\XSDRBookReference.cs" />
+    <Compile Include="Bibliography\XSDRCitation.cs" />
+    <Compile Include="Bibliography\XSDRReference.cs" />
+    <Compile Include="Bibliography\XSDRWebsiteReference.cs" />
     <Compile Include="DSSResolver.cs" />
     <Compile Include="IXSDRPageElement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -60,6 +65,8 @@
     <Compile Include="XSDRHeading.cs" />
     <Compile Include="XSDRItalic.cs" />
     <Compile Include="XSDRLength.cs" />
+    <Compile Include="XSDRListItem.cs" />
+    <Compile Include="XSDROrderedList.cs" />
     <Compile Include="XSDRPageBreak.cs" />
     <Compile Include="XSDRPageTemplate.cs" />
     <Compile Include="XSDRParagraph.cs" />
@@ -68,6 +75,7 @@
     <Compile Include="XSDRTemplate.cs" />
     <Compile Include="XSDRTextElement.cs" />
     <Compile Include="XSDRUnderline.cs" />
+    <Compile Include="XSDRUnorderedList.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

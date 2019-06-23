@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
+using XSDR.Bibliography;
 using DSS;
 
 namespace XSDR
@@ -12,6 +13,7 @@ namespace XSDR
     public class XMLImporter
     {
         private DSSImporter _dssImporter;
+        private XSDRDocument _xsdrDocument;
 
         public XMLImporter()
         {
@@ -21,6 +23,8 @@ namespace XSDR
         public XSDRDocument ImportDocument(string xmlFilePath, string dssFilePath = "")
         {
             var xsdrDocument = new XSDRDocument();
+
+            _xsdrDocument = xsdrDocument;
 
             var xmlDocument = new XmlDocument();
 
@@ -37,6 +41,37 @@ namespace XSDR
             xsdrDocument.Keywords = keywords.Split(',').Select(s => s.Trim());
 
             var sections = xmlDocument.SelectNodes("/document/sections/section");
+
+            if (xmlDocument.SelectSingleNode("/document/bibliography") != null && xmlDocument.SelectSingleNode("/document/bibliography/references") != null)
+            {
+                var references = xmlDocument.SelectNodes("/document/bibliography/references/reference");
+
+                foreach (XmlNode reference in references)
+                {
+                    if (reference.Attributes["type"] != null)
+                    {
+                        if (reference.Attributes["type"].Value == "book")
+                        {
+                            var book = new XSDRBookReference();
+
+                            book.Name = reference.Attributes["name"].Value;
+                            book.Title = reference.SelectSingleNode("title").InnerText;
+
+                            xsdrDocument.Bibliography.References.Add(book);
+                        }
+                        if (reference.Attributes["type"].Value == "website")
+                        {
+                            var website = new XSDRWebsiteReference();
+
+                            website.Name = reference.Attributes["name"].Value;
+                            website.Title = reference.SelectSingleNode("title").InnerText.Trim();
+                            website.URL = reference.SelectSingleNode("url").InnerText.Trim();
+
+                            xsdrDocument.Bibliography.References.Add(website);
+                        }
+                    }
+                }
+            }
 
             foreach (XmlNode section in sections)
             {
@@ -58,6 +93,26 @@ namespace XSDR
             }
 
             return xsdrDocument;
+        }
+
+        private bool BibliographicReferenceExists(string referenceName)
+        {
+            return _xsdrDocument.Bibliography.References.Any(r => r.Name == referenceName);
+        }
+
+        private int GetBibliographicReferenceNumber(string referenceName)
+        {
+            if (referenceName == null || !BibliographicReferenceExists(referenceName))
+            {
+                return -1;
+            }
+
+            if (!_xsdrDocument.Bibliography.ReferenceOrder.Any(rn => rn == referenceName))
+            {
+                _xsdrDocument.Bibliography.ReferenceOrder.Add(referenceName);
+            }
+
+            return _xsdrDocument.Bibliography.ReferenceOrder.IndexOf(referenceName) + 1;
         }
 
         private IList<IXSDRPageElement> GetPageElementsFromXML(XmlNodeList xmlNodes)
@@ -120,6 +175,30 @@ namespace XSDR
 
                     return s;
                 }
+                if (xmlNode.Name == "ol" || xmlNode.Name == "ordered-list")
+                {
+                    var ol = new XSDROrderedList();
+
+                    ol.Subelements = GetPageElementsFromXML(xmlNode.ChildNodes);
+
+                    return ol;
+                }
+                if (xmlNode.Name == "ul" || xmlNode.Name == "unordered-list")
+                {
+                    var ul = new XSDRUnorderedList();
+
+                    ul.Subelements = GetPageElementsFromXML(xmlNode.ChildNodes);
+
+                    return ul;
+                }
+                if (xmlNode.Name == "li" || xmlNode.Name == "list-item")
+                {
+                    var li = new XSDRListItem();
+
+                    li.Subelements = GetPageElementsFromXML(xmlNode.ChildNodes);
+
+                    return li;
+                }
                 if ((new string[] { "h1", "h2", "h3", "h4", "h5", "h6", "h7", "h8", "h9", "h10", "heading1", "heading2", "heading3", "heading4", "heading5", "heading6", "heading7", "heading8", "heading9", "heading10" }).Any(t => t == xmlNode.Name))
                 {
                     var level = 0;
@@ -179,6 +258,23 @@ namespace XSDR
                     var pb = new XSDRPageBreak();
 
                     return pb;
+                }
+                if (xmlNode.Name == "c" || xmlNode.Name == "citation")
+                {
+                    var c = new XSDRCitation();
+
+                    if (xmlNode.Attributes["rn"] != null)
+                    {
+                        c.ReferenceName = xmlNode.Attributes["rn"].Value;
+                    }
+                    if (xmlNode.Attributes["reference-name"] != null)
+                    {
+                        c.ReferenceName = xmlNode.Attributes["reference-name"].Value;
+                    }
+
+                    c.Number = GetBibliographicReferenceNumber(c.ReferenceName);
+
+                    return c;
                 }
             }
 

@@ -9,6 +9,7 @@
   </contributor>
   <keywords>example, test, something</keywords>
   <abstract>Something, something, something ... dark side. Something, something, something ... complete.</abstract>
+  
   <templates>
     <page-template reference="main" style="page-size: a4;"></page-template>
   </templates>

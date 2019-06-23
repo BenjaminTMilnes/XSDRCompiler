@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
+using XSDR.Bibliography;
 
 namespace XSDR
 {
@@ -97,6 +98,12 @@ namespace XSDR
                                     var text = ((e2 as XSDRStrikethrough).Subelements[0] as XSDRTextElement).Text;
 
                                     AddRunToParagraph(paragraph, text, _defaultFontName, (int)Math.Round((e2 as XSDRStrikethrough).CalculatedStyle.FontHeight.Points), false, false, false, true);
+                                }
+                                if (e2 is XSDRCitation)
+                                {
+                                    var text = " [" + (e2 as XSDRCitation).Number  + "]";
+
+                                    AddRunToParagraph(paragraph, text, _defaultFontName, (int)Math.Round((e1 as XSDRContentElement).CalculatedStyle.FontHeight.Points), false, false, false, false);
                                 }
                             }
                         }
