@@ -1,0 +1,18 @@
+﻿<Window x:Class="XSDR.WindowsApplication.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:XSDR.WindowsApplication"
+        mc:Ignorable="d"
+        Title="XSDR Compiler" Height="207.204" Width="525">
+    <Grid Margin="0,0,-0.333,1.667">
+        <Label x:Name="label1" Content="XSDR File" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0"/>
+        <TextBox x:Name="textBox1" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="414" Margin="10,41,0,0"/>
+        <Label x:Name="label2" Content="DSS File" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,69,0,0"/>
+        <TextBox x:Name="textBox2" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="414" Margin="10,100,0,0"/>
+        <Button x:Name="compileButton" Content="Compile" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="434,135,0,0" Click="compileButton_Click"/>
+        <Button x:Name="browseButton1" Content="Browse" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="434,41,0,0" Click="browseButton1_Click"/>
+        <Button x:Name="browseButton2" Content="Browse" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="434,100,0,0" Click="browseButton2_Click"/>
+    </Grid>
+</Window>
