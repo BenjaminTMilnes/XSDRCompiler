@@ -40,6 +40,8 @@
         <li>This is the second list item.</li>
       </ol>
 
+      <pb/>
+      <h1 style="font-angle: italic;">This heading should have inline styling. It should be in italic.</h1>
       <p  style="font-weight: bold; font-height: 20pt;">
         This paragraph has inline styling applied to it. It should be bold text with a font height of 20 pt.
       </p>

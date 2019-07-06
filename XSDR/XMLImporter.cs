@@ -139,11 +139,7 @@ namespace XSDR
                 {
                     var p = new XSDRParagraph();
 
-                    if (xmlNode.Attributes["style"] != null)
-                    {
-                        p.Style.Properties = _dssImporter.GetInlineProperties(xmlNode.Attributes["style"].Value).ToList();
-                    }
-
+                    ApplyInlineStyling(xmlNode, p);
                     p.Subelements = GetPageElementsFromXML(xmlNode.ChildNodes);
 
                     return p;
@@ -152,6 +148,7 @@ namespace XSDR
                 {
                     var i = new XSDRItalic();
 
+                    ApplyInlineStyling(xmlNode, i);
                     i.Subelements = GetPageElementsFromXML(xmlNode.ChildNodes);
 
                     return i;
@@ -160,6 +157,7 @@ namespace XSDR
                 {
                     var b = new XSDRBold();
 
+                    ApplyInlineStyling(xmlNode, b);
                     b.Subelements = GetPageElementsFromXML(xmlNode.ChildNodes);
 
                     return b;
@@ -168,6 +166,7 @@ namespace XSDR
                 {
                     var u = new XSDRUnderline();
 
+                    ApplyInlineStyling(xmlNode, u);
                     u.Subelements = GetPageElementsFromXML(xmlNode.ChildNodes);
 
                     return u;
@@ -176,6 +175,7 @@ namespace XSDR
                 {
                     var s = new XSDRStrikethrough();
 
+                    ApplyInlineStyling(xmlNode, s);
                     s.Subelements = GetPageElementsFromXML(xmlNode.ChildNodes);
 
                     return s;
@@ -184,6 +184,7 @@ namespace XSDR
                 {
                     var ol = new XSDROrderedList();
 
+                    ApplyInlineStyling(xmlNode, ol);
                     ol.Subelements = GetPageElementsFromXML(xmlNode.ChildNodes);
 
                     return ol;
@@ -192,6 +193,7 @@ namespace XSDR
                 {
                     var ul = new XSDRUnorderedList();
 
+                    ApplyInlineStyling(xmlNode, ul);
                     ul.Subelements = GetPageElementsFromXML(xmlNode.ChildNodes);
 
                     return ul;
@@ -200,6 +202,7 @@ namespace XSDR
                 {
                     var li = new XSDRListItem();
 
+                    ApplyInlineStyling(xmlNode, li);
                     li.Subelements = GetPageElementsFromXML(xmlNode.ChildNodes);
 
                     return li;
@@ -254,6 +257,7 @@ namespace XSDR
 
                     var h = new XSDRHeading(level);
 
+                    ApplyInlineStyling(xmlNode, h);
                     h.Subelements = GetPageElementsFromXML(xmlNode.ChildNodes);
 
                     return h;
@@ -284,6 +288,14 @@ namespace XSDR
             }
 
             throw new NotImplementedException();
+        }
+
+        public void ApplyInlineStyling(XmlNode xmlNode, XSDRContentElement element)
+        {
+            if (xmlNode.Attributes["style"] != null)
+            {
+                element.Style.Properties = _dssImporter.GetInlineProperties(xmlNode.Attributes["style"].Value).ToList();
+            }
         }
     }
 }

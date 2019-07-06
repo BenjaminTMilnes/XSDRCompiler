@@ -33,6 +33,8 @@ namespace XSDR
 
             using (WordprocessingDocument wordDocument = WordprocessingDocument.Create(filePath, WordprocessingDocumentType.Document))
             {
+                var n = 1;
+
                 var mainPart = wordDocument.AddMainDocumentPart();
 
                 mainPart.Document = new Document();
@@ -68,6 +70,39 @@ namespace XSDR
                             var paragraph = body.AppendChild(new Paragraph(paragraphProperties));
 
                             ExportXSDRPageElements(body, paragraph, e1 as XSDRContentElement, (e1 as XSDRContentElement).Subelements);
+                        }
+                        if (e1 is XSDRUnorderedList || e1 is XSDROrderedList)
+                        {
+                            var numberingPart = mainPart.AddNewPart<NumberingDefinitionsPart>("n" + n);
+
+                            var numberingFormat = new NumberingFormat() { Val = NumberFormatValues.Bullet };
+                            var levelText = new LevelText() { Val = "-" };
+                            var level = new Level(numberingFormat, levelText) { LevelIndex = 0 };
+
+                            var abstractNum = new AbstractNum(level) { AbstractNumberId = 1 };
+                            var abstractNumId = new AbstractNumId() { Val = 1 };
+                            var numberingInstance = new NumberingInstance(abstractNumId) { NumberID = 1 };
+                            var numbering = new Numbering(abstractNum, numberingInstance);
+
+                            numbering.Save(numberingPart);
+
+                            foreach (var e2 in (e1 as XSDRContentElement).Subelements)
+                            {
+                                if (e2 is XSDRListItem)
+                                {
+                                    var paragraphProperties = new ParagraphProperties();
+
+                                    var numberingLevelReference = new NumberingLevelReference() { Val = 0 };
+                                    var numberingId = new NumberingId() { Val = 1 };
+                                    var numberingProperties = new NumberingProperties(numberingLevelReference, numberingId);
+
+                                    paragraphProperties.Append(numberingProperties);
+
+                                    var paragraph = body.AppendChild(new Paragraph(paragraphProperties));
+
+                                    ExportXSDRPageElements(body, paragraph, e2 as XSDRContentElement, (e2 as XSDRContentElement).Subelements);
+                                }
+                            }
                         }
                         if (e1 is XSDRPageBreak)
                         {
@@ -135,7 +170,7 @@ namespace XSDR
         {
             var text = " [" + xsdrCitation.Number + "]";
 
-            AddRunToParagraph(paragraph, text,  container.CalculatedStyle.FontStyle);
+            AddRunToParagraph(paragraph, text, container.CalculatedStyle.FontStyle);
         }
 
         public void AddPageBreakToBody(Body body)
@@ -146,20 +181,20 @@ namespace XSDR
             run.AppendChild(new Break() { Type = BreakValues.Page });
         }
 
-        public void AddRunToParagraph(Paragraph paragraph, string text,  XSDRFontStyle fontStyle)
+        public void AddRunToParagraph(Paragraph paragraph, string text, XSDRFontStyle fontStyle)
         {
             var run = paragraph.AppendChild(new Run());
             var runProperties = new RunProperties(new RunFonts() { Ascii = fontStyle.FontName }, _getFontSize((int)Math.Round(fontStyle.FontHeight.Points)));
 
-            if ( fontStyle.FontAngle == XSDRFontAngle.Italic)
+            if (fontStyle.FontAngle == XSDRFontAngle.Italic)
             {
                 runProperties.Append(new Italic());
             }
-            if ( fontStyle.FontWeight == XSDRFontWeight.Bold)
+            if (fontStyle.FontWeight == XSDRFontWeight.Bold)
             {
                 runProperties.Append(new Bold());
             }
-            if (  fontStyle.UnderlineStyle == XSDRUnderlineStyle.Underlined)
+            if (fontStyle.UnderlineStyle == XSDRUnderlineStyle.Underlined)
             {
                 runProperties.Append(new Underline());
             }
