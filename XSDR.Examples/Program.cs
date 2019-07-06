@@ -15,15 +15,15 @@ namespace XSDR.Examples
             var xmlImporter = new XMLImporter();
             var wordExporter = new WordExporter();
 
-             for (var i = 1; i <=1; i++)
+            for (var i = 1; i <= 1; i++)
             {
-                var filePath1 = Path.Combine(Directory.GetCurrentDirectory(), "../../Examples/example" + i +".xml");
+                var filePath1 = Path.Combine(Directory.GetCurrentDirectory(), "../../Examples/example" + i + ".xml");
                 var filePath2 = Path.Combine(Directory.GetCurrentDirectory(), "../../Examples/example" + i + ".dss");
-                var filePath3 = Path.Combine(Directory.GetCurrentDirectory(), "../../Examples/example" + i +".docx");
+                var filePath3 = Path.Combine(Directory.GetCurrentDirectory(), "../../Examples/example" + i + ".docx");
 
                 var document = xmlImporter.ImportDocument(filePath1, filePath2);
 
-                wordExporter.ExportXSDRDocument( document, filePath3);
+                wordExporter.ExportXSDRDocument(document, filePath3);
             }
         }
     }

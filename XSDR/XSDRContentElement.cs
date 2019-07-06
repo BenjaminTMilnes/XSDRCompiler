@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DSS;
 
 namespace XSDR
 {
@@ -12,6 +13,7 @@ namespace XSDR
         public IList<IXSDRPageElement> Subelements { get; set; }
 
         public string Class { get; set; }
+        public DSSStyleRule Style { get; set; }
 
         public XSDRCalculatedStyle CalculatedStyle { get; set; }
 
@@ -19,6 +21,7 @@ namespace XSDR
         {
             ElementNames = new string[] { };
             Subelements = new List<IXSDRPageElement>();
+            Style = new DSSStyleRule();
             CalculatedStyle = new XSDRCalculatedStyle();
         }
     }

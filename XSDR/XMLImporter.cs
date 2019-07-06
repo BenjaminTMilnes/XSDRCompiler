@@ -139,6 +139,11 @@ namespace XSDR
                 {
                     var p = new XSDRParagraph();
 
+                    if (xmlNode.Attributes["style"] != null)
+                    {
+                        p.Style.Properties = _dssImporter.GetInlineProperties(xmlNode.Attributes["style"].Value).ToList();
+                    }
+
                     p.Subelements = GetPageElementsFromXML(xmlNode.ChildNodes);
 
                     return p;

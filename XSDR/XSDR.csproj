@@ -62,6 +62,7 @@
     <Compile Include="XSDRContributor.cs" />
     <Compile Include="XSDRContributorType.cs" />
     <Compile Include="XSDRDocument.cs" />
+    <Compile Include="XSDRFontStyle.cs" />
     <Compile Include="XSDRHeading.cs" />
     <Compile Include="XSDRItalic.cs" />
     <Compile Include="XSDRLength.cs" />

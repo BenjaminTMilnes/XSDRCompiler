@@ -11,6 +11,8 @@ namespace XSDR
         public XSDRItalic()
         {
             ElementNames = new string[] { "italic", "i" };
+
+            CalculatedStyle.FontStyle.FontAngle = XSDRFontAngle.Italic;
         }
     }
 }

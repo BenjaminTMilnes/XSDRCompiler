@@ -11,6 +11,8 @@ namespace XSDR
         public XSDRBold()
         {
             ElementNames = new string[] { "bold", "b" };
+
+            CalculatedStyle.FontStyle.FontWeight = XSDRFontWeight.Bold;
         }
     }
 }

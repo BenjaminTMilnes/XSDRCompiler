@@ -18,6 +18,62 @@ namespace XSDR
                     ResolveElements(styleRule, section.Subelements);
                 }
             }
+
+            foreach (var section in xsdrDocument.Sections)
+            {
+                ApplyInlineStylingToElements(section.Subelements);
+            }
+        }
+
+        protected void ApplyInlineStylingToElements(IEnumerable<IXSDRPageElement> elements)
+        {
+            foreach (var element in elements)
+            {
+                if (element is XSDRContentElement)
+                {
+                    ApplyInlineStylingToElement(element as XSDRContentElement);
+                }
+            }
+        }
+
+        protected void ApplyInlineStylingToElement(XSDRContentElement element)
+        {
+            ApplyStyleRulePropertiesToElement(element.Style.Properties, element);
+
+            ApplyInlineStylingToElements(element.Subelements);
+        }
+
+        protected void ApplyStyleRulePropertiesToElement(IEnumerable<DSSProperty> properties, XSDRContentElement element)
+        {
+            foreach (var property in properties)
+            {
+                if (property.Name == "font-name")
+                {
+                    element.CalculatedStyle.FontStyle.FontName = property.Value;
+                }
+                if (property.Name == "font-height")
+                {
+                    element.CalculatedStyle.FontStyle.FontHeight = XSDRLength.FromText(property.Value);
+                }
+                if (property.Name == "font-angle")
+                {
+                    if (property.Value == "italic")
+                    {
+                        element.CalculatedStyle.FontStyle.FontAngle = XSDRFontAngle.Italic;
+                    }
+                }
+                if (property.Name == "font-weight")
+                {
+                    if (property.Value == "bold")
+                    {
+                        element.CalculatedStyle.FontStyle.FontWeight = XSDRFontWeight.Bold;
+                    }
+                }
+                if (property.Name == "paragraph-indentation")
+                {
+                    element.CalculatedStyle.ParagraphIndentation = XSDRLength.FromText(property.Value);
+                }
+            }
         }
 
         protected void ResolveElements(DSSStyleRule styleRule, IEnumerable<IXSDRPageElement> elements)
@@ -42,21 +98,7 @@ namespace XSDR
 
             if (isMatchingElement)
             {
-                foreach (var property in styleRule.Properties)
-                {
-                    if (property.Name == "font-name")
-                    {
-                        element.CalculatedStyle.FontName = property.Value;
-                    }
-                    if (property.Name == "font-height")
-                    {
-                        element.CalculatedStyle.FontHeight = XSDRLength.FromText(property.Value);
-                    }
-                    if (property.Name == "paragraph-indentation")
-                    {
-                        element.CalculatedStyle.ParagraphIndentation = XSDRLength.FromText(property.Value);
-                    }
-                }
+                ApplyStyleRulePropertiesToElement(styleRule.Properties, element);
             }
 
             ResolveElements(styleRule, element.Subelements);

@@ -11,6 +11,8 @@ namespace XSDR
         public XSDRUnderline()
         {
             ElementNames = new string[] { "underline", "u" };
+
+            CalculatedStyle.FontStyle.UnderlineStyle = XSDRUnderlineStyle.Underlined;
         }
     }
 }

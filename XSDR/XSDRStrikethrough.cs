@@ -11,6 +11,8 @@ namespace XSDR
         public XSDRStrikethrough()
         {
             ElementNames = new string[] { "strikethrough", "s" };
+
+            CalculatedStyle.FontStyle.StrikethroughStyle = XSDRStrikethroughStyle.Strikethrough;
         }
     }
 }

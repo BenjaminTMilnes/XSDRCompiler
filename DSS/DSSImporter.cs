@@ -132,6 +132,25 @@ namespace DSS
             container.Selectors.Add(new DSSClassSelector(className));
         }
 
+        public IEnumerable<DSSProperty> GetInlineProperties(string dss)
+        {
+            var styleRule = new DSSStyleRule();
+            var marker = new Marker();
+
+            var i = -1;
+
+            while (marker.Position != i)
+            {
+                i = marker.Position;
+
+                GetWhitespace(dss, marker);
+                GetProperty(dss, styleRule, marker);
+                GetWhitespace(dss, marker);
+            }
+
+            return styleRule.Properties;
+        }
+
         public void GetProperties(string dss, DSSStyleRule container, Marker marker)
         {
             if (marker.Position >= dss.Length)

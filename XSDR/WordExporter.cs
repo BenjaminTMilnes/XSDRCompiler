@@ -100,42 +100,42 @@ namespace XSDR
         {
             var text = xsdrTextElement.Text;
 
-            AddRunToParagraph(paragraph, text, _defaultFontName, _defaultFontHeight);
+            AddRunToParagraph(paragraph, text, container.CalculatedStyle.FontStyle);
         }
 
         protected void ExportXSDRItalic(Body body, Paragraph paragraph, XSDRContentElement container, XSDRItalic xsdrItalic)
         {
             var text = (xsdrItalic.Subelements[0] as XSDRTextElement).Text;
 
-            AddRunToParagraph(paragraph, text, _defaultFontName, xsdrItalic.CalculatedStyle.FontHeight.Points, true);
+            AddRunToParagraph(paragraph, text, container.CalculatedStyle.FontStyle);
         }
 
         protected void ExportXSDRBold(Body body, Paragraph paragraph, XSDRContentElement container, XSDRBold xsdrBold)
         {
             var text = (xsdrBold.Subelements[0] as XSDRTextElement).Text;
 
-            AddRunToParagraph(paragraph, text, _defaultFontName, xsdrBold.CalculatedStyle.FontHeight.Points, false, true);
+            AddRunToParagraph(paragraph, text, container.CalculatedStyle.FontStyle);
         }
 
         protected void ExportXSDRUnderline(Body body, Paragraph paragraph, XSDRContentElement container, XSDRUnderline xsdrUnderline)
         {
             var text = (xsdrUnderline.Subelements[0] as XSDRTextElement).Text;
 
-            AddRunToParagraph(paragraph, text, _defaultFontName, xsdrUnderline.CalculatedStyle.FontHeight.Points, false, false, true);
+            AddRunToParagraph(paragraph, text, container.CalculatedStyle.FontStyle);
         }
 
         protected void ExportXSDRStrikethrough(Body body, Paragraph paragraph, XSDRContentElement container, XSDRStrikethrough xsdrStrikethrough)
         {
             var text = (xsdrStrikethrough.Subelements[0] as XSDRTextElement).Text;
 
-            AddRunToParagraph(paragraph, text, _defaultFontName, xsdrStrikethrough.CalculatedStyle.FontHeight.Points, false, false, false, true);
+            AddRunToParagraph(paragraph, text, container.CalculatedStyle.FontStyle);
         }
 
         protected void ExportXSDRCitation(Body body, Paragraph paragraph, XSDRContentElement container, XSDRCitation xsdrCitation)
         {
             var text = " [" + xsdrCitation.Number + "]";
 
-            AddRunToParagraph(paragraph, text, _defaultFontName, container.CalculatedStyle.FontHeight.Points, false, false, false, false);
+            AddRunToParagraph(paragraph, text,  container.CalculatedStyle.FontStyle);
         }
 
         public void AddPageBreakToBody(Body body)
@@ -146,24 +146,24 @@ namespace XSDR
             run.AppendChild(new Break() { Type = BreakValues.Page });
         }
 
-        public void AddRunToParagraph(Paragraph paragraph, string text, string fontName, double fontHeight, bool isItalic = false, bool isBold = false, bool isUnderlined = false, bool isStruckThrough = false)
+        public void AddRunToParagraph(Paragraph paragraph, string text,  XSDRFontStyle fontStyle)
         {
             var run = paragraph.AppendChild(new Run());
-            var runProperties = new RunProperties(new RunFonts() { Ascii = fontName }, _getFontSize((int)Math.Round(fontHeight)));
+            var runProperties = new RunProperties(new RunFonts() { Ascii = fontStyle.FontName }, _getFontSize((int)Math.Round(fontStyle.FontHeight.Points)));
 
-            if (isItalic)
+            if ( fontStyle.FontAngle == XSDRFontAngle.Italic)
             {
                 runProperties.Append(new Italic());
             }
-            if (isBold)
+            if ( fontStyle.FontWeight == XSDRFontWeight.Bold)
             {
                 runProperties.Append(new Bold());
             }
-            if (isUnderlined)
+            if (  fontStyle.UnderlineStyle == XSDRUnderlineStyle.Underlined)
             {
                 runProperties.Append(new Underline());
             }
-            if (isStruckThrough)
+            if (fontStyle.StrikethroughStyle == XSDRStrikethroughStyle.Strikethrough)
             {
                 runProperties.Append(new Strike());
             }
