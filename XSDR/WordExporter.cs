@@ -10,10 +10,34 @@ using XSDR.Bibliography;
 
 namespace XSDR
 {
-    public class WordExporter
+    public class WordExportContext
     {
-        private string _defaultFontName = "Garamond";
-        private int _defaultFontHeight = 10;
+        private WordprocessingDocument _document;
+        private MainDocumentPart _mainPart;
+
+        private SectionProperties _currentSectionProperties;
+        private ParagraphProperties _currentParagraphProperties;
+        private RunProperties _currentRunProperties;
+
+        private Body _body;
+        private Paragraph _currentParagraph;
+
+        public WordExportContext(WordprocessingDocument document)
+        {
+            _document = document;
+
+            _mainPart = _document.AddMainDocumentPart();
+            _mainPart.Document = new Document();
+
+            var header = _mainPart.AddNewPart<HeaderPart>();
+            var footer = _mainPart.AddNewPart<FooterPart>();
+
+            _body = _mainPart.Document.AppendChild(new Body());
+
+            _currentSectionProperties = new SectionProperties();
+
+            _body.Append(_currentSectionProperties);
+        }
 
         private FontSize _getFontSize(int fontHeight)
         {
@@ -25,6 +49,92 @@ namespace XSDR
             return (int)Math.Round(mm * 72 * 20 / 25.4);
         }
 
+        public void SetPageSizeForCurrentSection(double width = 128.5, double height = 198.4)
+        {
+            var pageSize = new PageSize();
+
+            pageSize.Width = (uint)ConvertFromMillimetres(width);
+            pageSize.Height = (uint)ConvertFromMillimetres(height);
+
+            _currentSectionProperties.Append(pageSize);
+        }
+
+        public void SetPageMarginForCurrentSection(double top = 20, double bottom = 20, double left = 20, double right = 20)
+        {
+            var pageMargin = new PageMargin();
+
+            pageMargin.Top = ConvertFromMillimetres(top);
+            pageMargin.Bottom = ConvertFromMillimetres(bottom);
+            pageMargin.Left = (uint)ConvertFromMillimetres(left);
+            pageMargin.Right = (uint)ConvertFromMillimetres(right);
+
+            _currentSectionProperties.Append(pageMargin);
+        }
+
+        public void BeginNewParagraph()
+        {
+            _currentParagraphProperties = new ParagraphProperties();
+            _currentParagraph = _body.AppendChild(new Paragraph(_currentParagraphProperties));
+        }
+
+        public void SetIndentationForCurrentParagraph(XSDRLength length)
+        {
+            _currentParagraphProperties.Append(new Indentation() { Hanging = length.Times(-1).MSWUnits.ToString() });
+        }
+
+        public void SetJustificationForCurrentParagraph()
+        {
+            _currentParagraphProperties.Append(new Justification() { Val = JustificationValues.Both });
+        }
+
+        public void SetFontStyle(XSDRFontStyle fontStyle)
+        {
+            var fontSize = _getFontSize((int)Math.Round(fontStyle.FontHeight.Points));
+
+            var runFonts = new RunFonts();
+
+            runFonts.Ascii = fontStyle.FontName;
+
+            _currentRunProperties = new RunProperties(runFonts, fontSize);
+
+            if (fontStyle.FontAngle == XSDRFontAngle.Italic)
+            {
+                _currentRunProperties.Append(new Italic());
+            }
+            if (fontStyle.FontWeight == XSDRFontWeight.Bold)
+            {
+                _currentRunProperties.Append(new Bold());
+            }
+            if (fontStyle.UnderlineStyle == XSDRUnderlineStyle.Underlined)
+            {
+                _currentRunProperties.Append(new Underline());
+            }
+            if (fontStyle.StrikethroughStyle == XSDRStrikethroughStyle.Strikethrough)
+            {
+                _currentRunProperties.Append(new Strike());
+            }
+        }
+
+        public void AddTextToParagraph(string text)
+        {
+            var run = _currentParagraph.AppendChild(new Run());
+
+            run.PrependChild(_currentRunProperties);
+            run.AppendChild(new Text() { Text = text, Space = SpaceProcessingModeValues.Preserve });
+        }
+
+        public void AddPageBreakToBody()
+        {
+            var paragraph = _body.AppendChild(new Paragraph());
+            var run = paragraph.AppendChild(new Run());
+
+            run.AppendChild(new Break() { Type = BreakValues.Page });
+
+        }
+    }
+
+    public class WordExporter
+    {
         public void ExportXSDRDocument(XSDRDocument document, string filePath)
         {
             OpenSettings openSettings = new OpenSettings();
@@ -33,27 +143,12 @@ namespace XSDR
 
             using (WordprocessingDocument wordDocument = WordprocessingDocument.Create(filePath, WordprocessingDocumentType.Document))
             {
+                var context = new WordExportContext(wordDocument);
+
                 var n = 1;
 
-                var mainPart = wordDocument.AddMainDocumentPart();
-
-                mainPart.Document = new Document();
-
-                var header = mainPart.AddNewPart<HeaderPart>();
-                var footer = mainPart.AddNewPart<FooterPart>();
-
-                var body = mainPart.Document.AppendChild(new Body());
-
-                var sectionProperties = new SectionProperties();
-                var pageSize = new PageSize();
-                pageSize.Width = (uint)ConvertFromMillimetres(128.5);
-                pageSize.Height = (uint)ConvertFromMillimetres(198.4);
-
-                var pageMargin = new PageMargin() { Top = ConvertFromMillimetres(20), Bottom = ConvertFromMillimetres(20), Left = (uint)ConvertFromMillimetres(20), Right = (uint)ConvertFromMillimetres(20) };
-
-                sectionProperties.Append(pageSize);
-                sectionProperties.Append(pageMargin);
-                body.Append(sectionProperties);
+                context.SetPageSizeForCurrentSection();
+                context.SetPageMarginForCurrentSection();
 
                 foreach (var s in document.Sections)
                 {
@@ -61,150 +156,122 @@ namespace XSDR
                     {
                         if (e1 is XSDRParagraph || e1 is XSDRHeading)
                         {
-                            var paragraphProperties = new ParagraphProperties();
+                            context.BeginNewParagraph();
 
-                            paragraphProperties.Append(new Indentation() { Hanging = (e1 as XSDRContentElement).CalculatedStyle.ParagraphIndentation.Times(-1).MSWUnits.ToString() });
+                            context.SetIndentationForCurrentParagraph((e1 as XSDRContentElement).CalculatedStyle.ParagraphIndentation);
+                            context.SetJustificationForCurrentParagraph();
 
-                            paragraphProperties.Append(new Justification() { Val = JustificationValues.Both });
+                            context.SetFontStyle((e1 as XSDRContentElement).CalculatedStyle.FontStyle);
 
-                            var paragraph = body.AppendChild(new Paragraph(paragraphProperties));
-
-                            ExportXSDRPageElements(body, paragraph, e1 as XSDRContentElement, (e1 as XSDRContentElement).Subelements);
+                            ExportXSDRPageElements(context, e1 as XSDRContentElement, (e1 as XSDRContentElement).Subelements);
                         }
-                        if (e1 is XSDRUnorderedList || e1 is XSDROrderedList)
-                        {
-                            var numberingPart = mainPart.AddNewPart<NumberingDefinitionsPart>("n" + n);
+                        /*   if (e1 is XSDRUnorderedList || e1 is XSDROrderedList)
+                           {
+                               var numberingPart = mainPart.AddNewPart<NumberingDefinitionsPart>("n" + n);
 
-                            var numberingFormat = new NumberingFormat() { Val = NumberFormatValues.Bullet };
-                            var levelText = new LevelText() { Val = "-" };
-                            var level = new Level(numberingFormat, levelText) { LevelIndex = 0 };
+                               var numberingFormat = new NumberingFormat() { Val = NumberFormatValues.Bullet };
+                               var levelText = new LevelText() { Val = "-" };
+                               var level = new Level(numberingFormat, levelText) { LevelIndex = 0 };
 
-                            var abstractNum = new AbstractNum(level) { AbstractNumberId = 1 };
-                            var abstractNumId = new AbstractNumId() { Val = 1 };
-                            var numberingInstance = new NumberingInstance(abstractNumId) { NumberID = 1 };
-                            var numbering = new Numbering(abstractNum, numberingInstance);
+                               var abstractNum = new AbstractNum(level) { AbstractNumberId = 1 };
+                               var abstractNumId = new AbstractNumId() { Val = 1 };
+                               var numberingInstance = new NumberingInstance(abstractNumId) { NumberID = 1 };
+                               var numbering = new Numbering(abstractNum, numberingInstance);
 
-                            numbering.Save(numberingPart);
+                               numbering.Save(numberingPart);
 
-                            foreach (var e2 in (e1 as XSDRContentElement).Subelements)
-                            {
-                                if (e2 is XSDRListItem)
-                                {
-                                    var paragraphProperties = new ParagraphProperties();
+                               foreach (var e2 in (e1 as XSDRContentElement).Subelements)
+                               {
+                                   if (e2 is XSDRListItem)
+                                   {
+                                       var paragraphProperties = new ParagraphProperties();
 
-                                    var numberingLevelReference = new NumberingLevelReference() { Val = 0 };
-                                    var numberingId = new NumberingId() { Val = 1 };
-                                    var numberingProperties = new NumberingProperties(numberingLevelReference, numberingId);
+                                       var numberingLevelReference = new NumberingLevelReference() { Val = 0 };
+                                       var numberingId = new NumberingId() { Val = 1 };
+                                       var numberingProperties = new NumberingProperties(numberingLevelReference, numberingId);
 
-                                    paragraphProperties.Append(numberingProperties);
+                                       paragraphProperties.Append(numberingProperties);
 
-                                    var paragraph = body.AppendChild(new Paragraph(paragraphProperties));
+                                       var paragraph = body.AppendChild(new Paragraph(paragraphProperties));
 
-                                    ExportXSDRPageElements(body, paragraph, e2 as XSDRContentElement, (e2 as XSDRContentElement).Subelements);
-                                }
-                            }
-                        }
+                                       ExportXSDRPageElements(body, paragraph, e2 as XSDRContentElement, (e2 as XSDRContentElement).Subelements);
+                                   }
+                               }
+                           }*/
                         if (e1 is XSDRPageBreak)
                         {
-                            AddPageBreakToBody(body);
+                            context.AddPageBreakToBody();
                         }
                     }
                 }
             }
         }
 
-        protected void ExportXSDRPageElements(Body body, Paragraph paragraph, XSDRContentElement container, IEnumerable<IXSDRPageElement> xsdrPageElements)
+        protected void ExportXSDRPageElements(WordExportContext context, XSDRContentElement container, IEnumerable<IXSDRPageElement> xsdrPageElements)
         {
             foreach (var xsdrPageElement in xsdrPageElements)
             {
-                ExportXSDRPageElement(body, paragraph, container, xsdrPageElement);
+                ExportXSDRPageElement(context, container, xsdrPageElement);
             }
         }
 
-        protected void ExportXSDRPageElement(Body body, Paragraph paragraph, XSDRContentElement container, IXSDRPageElement xsdrPageElement)
+        protected void ExportXSDRPageElement(WordExportContext context, XSDRContentElement container, IXSDRPageElement xsdrPageElement)
         {
-            if (xsdrPageElement is XSDRTextElement) { ExportXSDRTextElement(body, paragraph, container, xsdrPageElement as XSDRTextElement); }
-            if (xsdrPageElement is XSDRItalic) { ExportXSDRItalic(body, paragraph, container, xsdrPageElement as XSDRItalic); }
-            if (xsdrPageElement is XSDRBold) { ExportXSDRBold(body, paragraph, container, xsdrPageElement as XSDRBold); }
-            if (xsdrPageElement is XSDRUnderline) { ExportXSDRUnderline(body, paragraph, container, xsdrPageElement as XSDRUnderline); }
-            if (xsdrPageElement is XSDRStrikethrough) { ExportXSDRStrikethrough(body, paragraph, container, xsdrPageElement as XSDRStrikethrough); }
-            if (xsdrPageElement is XSDRCitation) { ExportXSDRCitation(body, paragraph, container, xsdrPageElement as XSDRCitation); }
+            if (xsdrPageElement is XSDRTextElement) { ExportXSDRTextElement(context, xsdrPageElement as XSDRTextElement); }
+            if (xsdrPageElement is XSDRItalic) { ExportXSDRItalic(context, container, xsdrPageElement as XSDRItalic); }
+            if (xsdrPageElement is XSDRBold) { ExportXSDRBold(context, container, xsdrPageElement as XSDRBold); }
+            if (xsdrPageElement is XSDRUnderline) { ExportXSDRUnderline(context, container, xsdrPageElement as XSDRUnderline); }
+            if (xsdrPageElement is XSDRStrikethrough) { ExportXSDRStrikethrough(context, container, xsdrPageElement as XSDRStrikethrough); }
+            if (xsdrPageElement is XSDRCitation) { ExportXSDRCitation(context, container, xsdrPageElement as XSDRCitation); }
         }
 
-        protected void ExportXSDRTextElement(Body body, Paragraph paragraph, XSDRContentElement container, XSDRTextElement xsdrTextElement)
+        protected void ExportXSDRTextElement(WordExportContext context, XSDRTextElement xsdrTextElement)
         {
-            var text = xsdrTextElement.Text;
-
-            AddRunToParagraph(paragraph, text, container.CalculatedStyle.FontStyle);
+            context.AddTextToParagraph(xsdrTextElement.Text);
         }
 
-        protected void ExportXSDRItalic(Body body, Paragraph paragraph, XSDRContentElement container, XSDRItalic xsdrItalic)
+        protected void ExportXSDRItalic(WordExportContext context, XSDRContentElement container, XSDRItalic xsdrItalic)
         {
-            var text = (xsdrItalic.Subelements[0] as XSDRTextElement).Text;
+            context.SetFontStyle(xsdrItalic.CalculatedStyle.FontStyle);
 
-            AddRunToParagraph(paragraph, text, container.CalculatedStyle.FontStyle);
+            ExportXSDRPageElements(context, xsdrItalic, xsdrItalic.Subelements);
+
+            context.SetFontStyle(container.CalculatedStyle.FontStyle);
         }
 
-        protected void ExportXSDRBold(Body body, Paragraph paragraph, XSDRContentElement container, XSDRBold xsdrBold)
+        protected void ExportXSDRBold(WordExportContext context, XSDRContentElement container, XSDRBold xsdrBold)
         {
-            var text = (xsdrBold.Subelements[0] as XSDRTextElement).Text;
+            context.SetFontStyle(xsdrBold.CalculatedStyle.FontStyle);
 
-            AddRunToParagraph(paragraph, text, container.CalculatedStyle.FontStyle);
+            ExportXSDRPageElements(context, xsdrBold, xsdrBold.Subelements);
+
+            context.SetFontStyle(container.CalculatedStyle.FontStyle);
         }
 
-        protected void ExportXSDRUnderline(Body body, Paragraph paragraph, XSDRContentElement container, XSDRUnderline xsdrUnderline)
+        protected void ExportXSDRUnderline(WordExportContext context, XSDRContentElement container, XSDRUnderline xsdrUnderline)
         {
-            var text = (xsdrUnderline.Subelements[0] as XSDRTextElement).Text;
+            context.SetFontStyle(xsdrUnderline.CalculatedStyle.FontStyle);
 
-            AddRunToParagraph(paragraph, text, container.CalculatedStyle.FontStyle);
+            ExportXSDRPageElements(context, xsdrUnderline, xsdrUnderline.Subelements);
+
+            context.SetFontStyle(container.CalculatedStyle.FontStyle);
         }
 
-        protected void ExportXSDRStrikethrough(Body body, Paragraph paragraph, XSDRContentElement container, XSDRStrikethrough xsdrStrikethrough)
+        protected void ExportXSDRStrikethrough(WordExportContext context, XSDRContentElement container, XSDRStrikethrough xsdrStrikethrough)
         {
-            var text = (xsdrStrikethrough.Subelements[0] as XSDRTextElement).Text;
+            context.SetFontStyle(xsdrStrikethrough.CalculatedStyle.FontStyle);
 
-            AddRunToParagraph(paragraph, text, container.CalculatedStyle.FontStyle);
+            ExportXSDRPageElements(context, xsdrStrikethrough, xsdrStrikethrough.Subelements);
+
+            context.SetFontStyle(container.CalculatedStyle.FontStyle);
         }
 
-        protected void ExportXSDRCitation(Body body, Paragraph paragraph, XSDRContentElement container, XSDRCitation xsdrCitation)
+        protected void ExportXSDRCitation(WordExportContext context, XSDRContentElement container, XSDRCitation xsdrCitation)
         {
             var text = " [" + xsdrCitation.Number + "]";
 
-            AddRunToParagraph(paragraph, text, container.CalculatedStyle.FontStyle);
-        }
-
-        public void AddPageBreakToBody(Body body)
-        {
-            var paragraph = body.AppendChild(new Paragraph());
-            var run = paragraph.AppendChild(new Run());
-
-            run.AppendChild(new Break() { Type = BreakValues.Page });
-        }
-
-        public void AddRunToParagraph(Paragraph paragraph, string text, XSDRFontStyle fontStyle)
-        {
-            var run = paragraph.AppendChild(new Run());
-            var runProperties = new RunProperties(new RunFonts() { Ascii = fontStyle.FontName }, _getFontSize((int)Math.Round(fontStyle.FontHeight.Points)));
-
-            if (fontStyle.FontAngle == XSDRFontAngle.Italic)
-            {
-                runProperties.Append(new Italic());
-            }
-            if (fontStyle.FontWeight == XSDRFontWeight.Bold)
-            {
-                runProperties.Append(new Bold());
-            }
-            if (fontStyle.UnderlineStyle == XSDRUnderlineStyle.Underlined)
-            {
-                runProperties.Append(new Underline());
-            }
-            if (fontStyle.StrikethroughStyle == XSDRStrikethroughStyle.Strikethrough)
-            {
-                runProperties.Append(new Strike());
-            }
-
-            run.PrependChild(runProperties);
-            run.AppendChild(new Text() { Text = text, Space = SpaceProcessingModeValues.Preserve });
+            context.SetFontStyle(container.CalculatedStyle.FontStyle);
+            context.AddTextToParagraph(text);
         }
     }
 }
