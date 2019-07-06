@@ -218,10 +218,9 @@ namespace XSDR
         protected void ExportXSDRPageElement(WordExportContext context, XSDRContentElement container, IXSDRPageElement xsdrPageElement)
         {
             if (xsdrPageElement is XSDRTextElement) { ExportXSDRTextElement(context, xsdrPageElement as XSDRTextElement); }
-            if (xsdrPageElement is XSDRItalic) { ExportXSDRItalic(context, container, xsdrPageElement as XSDRItalic); }
-            if (xsdrPageElement is XSDRBold) { ExportXSDRBold(context, container, xsdrPageElement as XSDRBold); }
-            if (xsdrPageElement is XSDRUnderline) { ExportXSDRUnderline(context, container, xsdrPageElement as XSDRUnderline); }
-            if (xsdrPageElement is XSDRStrikethrough) { ExportXSDRStrikethrough(context, container, xsdrPageElement as XSDRStrikethrough); }
+
+            if (xsdrPageElement is XSDRItalic || xsdrPageElement is XSDRBold || xsdrPageElement is XSDRUnderline || xsdrPageElement is XSDRStrikethrough) { ExportXSDRInlineElement(context, container, xsdrPageElement as XSDRContentElement); }
+
             if (xsdrPageElement is XSDRCitation) { ExportXSDRCitation(context, container, xsdrPageElement as XSDRCitation); }
         }
 
@@ -230,38 +229,11 @@ namespace XSDR
             context.AddTextToParagraph(xsdrTextElement.Text);
         }
 
-        protected void ExportXSDRItalic(WordExportContext context, XSDRContentElement container, XSDRItalic xsdrItalic)
+        protected void ExportXSDRInlineElement(WordExportContext context, XSDRContentElement container, XSDRContentElement inlineElement)
         {
-            context.SetFontStyle(xsdrItalic.CalculatedStyle.FontStyle);
+            context.SetFontStyle(inlineElement.CalculatedStyle.FontStyle);
 
-            ExportXSDRPageElements(context, xsdrItalic, xsdrItalic.Subelements);
-
-            context.SetFontStyle(container.CalculatedStyle.FontStyle);
-        }
-
-        protected void ExportXSDRBold(WordExportContext context, XSDRContentElement container, XSDRBold xsdrBold)
-        {
-            context.SetFontStyle(xsdrBold.CalculatedStyle.FontStyle);
-
-            ExportXSDRPageElements(context, xsdrBold, xsdrBold.Subelements);
-
-            context.SetFontStyle(container.CalculatedStyle.FontStyle);
-        }
-
-        protected void ExportXSDRUnderline(WordExportContext context, XSDRContentElement container, XSDRUnderline xsdrUnderline)
-        {
-            context.SetFontStyle(xsdrUnderline.CalculatedStyle.FontStyle);
-
-            ExportXSDRPageElements(context, xsdrUnderline, xsdrUnderline.Subelements);
-
-            context.SetFontStyle(container.CalculatedStyle.FontStyle);
-        }
-
-        protected void ExportXSDRStrikethrough(WordExportContext context, XSDRContentElement container, XSDRStrikethrough xsdrStrikethrough)
-        {
-            context.SetFontStyle(xsdrStrikethrough.CalculatedStyle.FontStyle);
-
-            ExportXSDRPageElements(context, xsdrStrikethrough, xsdrStrikethrough.Subelements);
+            ExportXSDRPageElements(context, inlineElement, inlineElement.Subelements);
 
             context.SetFontStyle(container.CalculatedStyle.FontStyle);
         }

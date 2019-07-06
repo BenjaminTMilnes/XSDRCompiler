@@ -142,6 +142,18 @@ namespace XSDR
                     ApplyInlineStyling(xmlNode, p);
                     p.Subelements = GetPageElementsFromXML(xmlNode.ChildNodes);
 
+                    if (p.Subelements.Any())
+                    {
+                        if (p.Subelements.First() is XSDRTextElement)
+                        {
+                            (p.Subelements.First() as XSDRTextElement).Text = (p.Subelements.First() as XSDRTextElement).Text.TrimStart();
+                        }
+                        if (p.Subelements.Last() is XSDRTextElement)
+                        {
+                            (p.Subelements.Last() as XSDRTextElement).Text = (p.Subelements.Last() as XSDRTextElement).Text.TrimEnd();
+                        }
+                    }
+
                     return p;
                 }
                 if (xmlNode.Name == "i" || xmlNode.Name == "italic")

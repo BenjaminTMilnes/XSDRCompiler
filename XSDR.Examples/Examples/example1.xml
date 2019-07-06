@@ -30,15 +30,18 @@
   <sections>
     <section page-template-reference="main">
       <h1>An introduction to quick brown foxes and grumpy wizards</h1>
-      <p>
-        Grumpy wizards make <b>toxic</b> brew for the <i>Evil Queen</i> and Jack. <s>The quick brown fox jumps over the lazy dog.</s>
-      </p>
-      <h2>Did you ever hear the tragedy of Darth Plagueis the Wise?</h2>
+          <h2>Did you ever hear the tragedy of Darth Plagueis the Wise?</h2>
       <p>I thought not. It's not a story the Jedi would teach you.</p>
       <ol>
         <li>This is the first list item.</li>
         <li>This is the second list item.</li>
       </ol>
+      
+      <pb/>
+      <p>
+        This text should appear normal. <b>This text should appear bold.</b> <i>This text should appear italic.</i> <u>This text should appear underlined.</u> <s>And this text should appear struckthrough.</s> 
+      </p>
+      <p>This paragraph contains a mixture of styling tags, <b>some <i>nested</i> within each other</b>.</p>
 
       <pb/>
       <h1 style="font-angle: italic;">This heading should have inline styling. It should be in italic.</h1>
