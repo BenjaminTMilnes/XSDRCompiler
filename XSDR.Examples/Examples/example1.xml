@@ -25,23 +25,70 @@
     </references>
   </bibliography>
   <templates>
-    <page-template reference="main" style="page-size: a4;"></page-template>
+    <page-template reference="main" style="page-size: a4;">
+      <footer>
+           Page         <page-variable name="page-number" />
+      </footer>
+    </page-template>
   </templates>
   <sections>
     <section page-template-reference="main">
       <h1>An introduction to quick brown foxes and grumpy wizards</h1>
-          <h2>Did you ever hear the tragedy of Darth Plagueis the Wise?</h2>
+      <h2>Did you ever hear the tragedy of Darth Plagueis the Wise?</h2>
       <p>I thought not. It's not a story the Jedi would teach you.</p>
       <ol>
         <li>This is the first list item.</li>
         <li>This is the second list item.</li>
       </ol>
-      
+
+      <pb/>
+      <p style="paragraph-alignment: left;">
+        This text should be left-aligned.
+        This text should be left-aligned.
+        This text should be left-aligned.
+        This text should be left-aligned.
+        This text should be left-aligned.
+        This text should be left-aligned.
+        This text should be left-aligned.
+        This text should be left-aligned.
+      </p>
+      <p style="paragraph-alignment: right;">
+        This text should be right-aligned.
+        This text should be right-aligned.
+        This text should be right-aligned.
+        This text should be right-aligned.
+        This text should be right-aligned.
+        This text should be right-aligned.
+        This text should be right-aligned.
+        This text should be right-aligned.
+      </p>
+      <p style="paragraph-alignment: centred;">
+        This text should be centred.
+        This text should be centred.
+        This text should be centred.
+        This text should be centred.
+        This text should be centred.
+        This text should be centred.
+        This text should be centred.
+        This text should be centred.
+      </p>
+      <p style="paragraph-alignment: justified;">
+        This text should be justified.
+        This text should be justified.
+        This text should be justified.
+        This text should be justified.
+        This text should be justified.
+        This text should be justified.
+      </p>
       <pb/>
       <p>
-        This text should appear normal. <b>This text should appear bold.</b> <i>This text should appear italic.</i> <u>This text should appear underlined.</u> <s>And this text should appear struckthrough.</s> 
+        This text should appear normal. <b>This text should appear bold.</b> <i>This text should appear italic.</i> <u>This text should appear underlined.</u> <s>And this text should appear struckthrough.</s>
       </p>
-      <p>This paragraph contains a mixture of styling tags, <b>some <i>nested</i> within each other</b>.</p>
+      <p>
+        This paragraph contains a mixture of styling tags, <b>
+          some <i>nested</i> within each other
+        </b>.
+      </p>
 
       <pb/>
       <h1 style="font-angle: italic;">This heading should have inline styling. It should be in italic.</h1>

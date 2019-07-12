@@ -7,6 +7,7 @@ using System.Xml;
 using System.IO;
 using XSDR.Bibliography;
 using DSS;
+using System.Text.RegularExpressions;
 
 namespace XSDR
 {
@@ -39,6 +40,17 @@ namespace XSDR
             xsdrDocument.Title = title;
             xsdrDocument.Subtitle = subtitle;
             xsdrDocument.Keywords = keywords.Split(',').Select(s => s.Trim());
+
+            var pageTemplates = xmlDocument.SelectNodes("/document/templates/page-template");
+
+            foreach (XmlNode pageTemplate in pageTemplates)
+            {
+                var pt = new XSDRPageTemplate();
+
+                pt.Subelements = GetPageElementsFromXML(pageTemplate.ChildNodes);
+
+                xsdrDocument.Templates.Add(pt);
+            }
 
             var sections = xmlDocument.SelectNodes("/document/sections/section");
 
@@ -131,7 +143,11 @@ namespace XSDR
         {
             if (xmlNode.NodeType == XmlNodeType.Text)
             {
-                return new XSDRTextElement(xmlNode.InnerText);
+                var text = xmlNode.InnerText;
+
+                text = Regex.Replace(text, "\\s+", " ");
+
+                return new XSDRTextElement(text);
             }
             if (xmlNode.NodeType == XmlNodeType.Element)
             {
@@ -279,6 +295,37 @@ namespace XSDR
                     var pb = new XSDRPageBreak();
 
                     return pb;
+                }
+                if (xmlNode.Name == "header")
+                {
+                    var header = new XSDRHeader();
+
+                    ApplyInlineStyling(xmlNode, header);
+                    header.Subelements = GetPageElementsFromXML(xmlNode.ChildNodes);
+
+                    return header;
+                }
+                if (xmlNode.Name == "footer")
+                {
+                    var footer = new XSDRFooter();
+
+                    ApplyInlineStyling(xmlNode, footer);
+                    footer.Subelements = GetPageElementsFromXML(xmlNode.ChildNodes);
+
+                    return footer;
+                }
+                if (xmlNode.Name == "pv" || xmlNode.Name == "page-variable")
+                {
+                    var pv = new XSDRPageVariable();
+
+                    if (xmlNode.Attributes["name"] != null)
+                    {
+                        pv.Name = xmlNode.Attributes["name"].Value;
+                    }
+
+                    ApplyInlineStyling(xmlNode, pv);
+
+                    return pv;
                 }
                 if (xmlNode.Name == "c" || xmlNode.Name == "citation")
                 {

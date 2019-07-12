@@ -69,6 +69,25 @@ namespace XSDR
                         element.CalculatedStyle.FontStyle.FontWeight = XSDRFontWeight.Bold;
                     }
                 }
+                if (property.Name == "paragraph-alignment")
+                {
+                    if (property.Value == "left")
+                    {
+                        element.CalculatedStyle.ParagraphAlignment = XSDRParagraphAlignment.LeftAlign;
+                    }
+                    if (property.Value == "right")
+                    {
+                        element.CalculatedStyle.ParagraphAlignment = XSDRParagraphAlignment.RightAlign;
+                    }
+                    if (property.Value == "centred")
+                    {
+                        element.CalculatedStyle.ParagraphAlignment = XSDRParagraphAlignment.Centred;
+                    }
+                    if (property.Value == "justified")
+                    {
+                        element.CalculatedStyle.ParagraphAlignment = XSDRParagraphAlignment.LeftJustified;
+                    }
+                }
                 if (property.Name == "paragraph-indentation")
                 {
                     element.CalculatedStyle.ParagraphIndentation = XSDRLength.FromText(property.Value);

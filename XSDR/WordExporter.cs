@@ -82,9 +82,24 @@ namespace XSDR
             _currentParagraphProperties.Append(new Indentation() { Hanging = length.Times(-1).MSWUnits.ToString() });
         }
 
-        public void SetJustificationForCurrentParagraph()
+        public void SetJustificationForCurrentParagraph(XSDRParagraphAlignment paragraphAlignment)
         {
-            _currentParagraphProperties.Append(new Justification() { Val = JustificationValues.Both });
+            if (paragraphAlignment == XSDRParagraphAlignment.LeftAlign)
+            {
+                _currentParagraphProperties.Append(new Justification() { Val = JustificationValues.Left });
+            }
+            if (paragraphAlignment == XSDRParagraphAlignment.RightAlign)
+            {
+                _currentParagraphProperties.Append(new Justification() { Val = JustificationValues.Right });
+            }
+            if (paragraphAlignment == XSDRParagraphAlignment.Centred)
+            {
+                _currentParagraphProperties.Append(new Justification() { Val = JustificationValues.Center });
+            }
+            if (paragraphAlignment == XSDRParagraphAlignment.LeftJustified)
+            {
+                _currentParagraphProperties.Append(new Justification() { Val = JustificationValues.Both });
+            }
         }
 
         public void SetFontStyle(XSDRFontStyle fontStyle)
@@ -159,7 +174,7 @@ namespace XSDR
                             context.BeginNewParagraph();
 
                             context.SetIndentationForCurrentParagraph((e1 as XSDRContentElement).CalculatedStyle.ParagraphIndentation);
-                            context.SetJustificationForCurrentParagraph();
+                            context.SetJustificationForCurrentParagraph((e1 as XSDRContentElement).CalculatedStyle.ParagraphAlignment);
 
                             context.SetFontStyle((e1 as XSDRContentElement).CalculatedStyle.FontStyle);
 
