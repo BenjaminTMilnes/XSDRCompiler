@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<document version="0.2">
+  <title>An Example Book</title>
+  <subtitle>Let's see if this works</subtitle>
+  <contributor>
+    <name>B. T. Milnes</name>
+    <email-address>example@example.com</email-address>
+    <website>https://github.com/BenjaminTMilnes/</website>
+  </contributor>
+  <keywords>something, else, thing</keywords>
+  <abstract>Something, something, something ... dark side.</abstract>
+  <templates>
+    <page-template reference="halftitlepage" style="page-size: a4;">
+    </page-template>
+    <page-template reference="publishingpage" style="page-size: a4;">
+    </page-template>
+    <page-template reference="titlepage" style="page-size: a4;">
+    </page-template>
+    <page-template reference="main" style="page-size: a4;">
+    </page-template>
+  </templates>
+  <sections>
+    <section ptr="main" style-class="main">
+
+      <p>
+        Deleantur persuadet at eminenter conceptum an ea. Ne advertebam et objectivum ac ut durationis. Facillimam ac at si considerem ex mutationum. Ei paulatim gi to si articulo imaginem. Tantaeque ad dubitandi ob assentiri veritatis meditatio. Imbecillia voluptatem agi uno hoc agnoscerem sua conflantur percurrere. Ceram ideae valde vos hoc quo ego. Liberet lus imo simplex sap percipi invicem dicendo scripto sed. Vox visus nullo minus intra fas autem eam cui.
+      </p>
+      <p>
+        Divelli tot nul ideoque hic clarius remanet ope junctas. Ob ut prout foret recte istam. Exigere at formali eo ex cogitem. Denique habetur is invenit re. Perfectis tractarem dat ego componant ope. Fatigor ut securum possent relabor praeter an ex. Originem temporis una quo meditari obnoxius cui qui.
+      </p>
+      <p>
+        Non alterum finitas tot diversi. Gi durent ad se pendam cupiam ut. Ego affirmans oblivisci via exponetur vim age existeret. At cumque de semper pulses ut. Reducantur detorqueat via potentiali supponatur indefinite sic repugnaret per. Ut de tritam gi veluti amisit illico.
+      </p>
+      <p>
+        Rantem necdum cumque una cap eamque sum vitiis. Hos heri ipsi novi est hoc aspi cum. Rom nul potuit non fueram animam. Sanguinem faciendam sua sum deleantur objectiva remanetne sed cunctatus. Opiniones examinare aggrediar naturales dat desumptas dem. Durent vacabo eo negans de paucos ex. Pudeat ha in attigi putare ad de.
+      </p>
+      <p>
+        Eorum magis ut ex ut totus vobis. Factas mentes iisdem volent ut me habere aptior. Lente aures terra fit lus eam jam. Cui deveniri cui regendae nonnihil nia. Ero curis solum audio hoc pappo. Mo si ex effectrix conflatum du effecerit. Statuendum sed imo indubitata imbecillia est devenietur. Et exigere id sumamus caetera tempore proxime ordinem. Propria videmur reliqua ad ea junctas at.
+      </p>
+      <p>
+        Quia item mens illi gi apti et rari. Non tam cap delaberer persuadet pertinere. Mei datur vitam istis nolim imo aliam hac cum. Superare deficere periculi ex ei. Commoveo experior co obturabo quanquam ii. Fit magnis finiti simile ita negans semper aspexi. Stabilire sequentia dei rea quaslibet dem dum intelligo continere chimaeram. Ii nota vi ex fuit novo illa. Ex lucis in situm ii tanta novam mecum.
+      </p>
+      <p>
+        Supponam hic deceptor potentia ope nequidem dumtaxat. Locus patet dum hic abuti. Ac equidem apertum nequeam sopitum judicio id liberet mo ha. Tria gi ex nota at apud apta solo ut vidi. Progressum eo perspicuum blandisque istiusmodi expectabam prudentiae ea. Cui requiratur cogitantem explicetur jam. Du in aetheris cessarem circulum de. Scripti capacem errores affirmo ut to haustam studiis.
+      </p>
+      <p>
+        Fruebatur ha ut cupientem ingeniosi re inscitiae ac formantur. Ex re quomodo punctum ignotae quisnam de ii. Quem at quod du quam suam modo de solo. Societati at de ea persuasus dubitarem. Invenit majorem quiddam ad et at ac. Dissimilem ne ei ad utilitatis perfectius re durationis affirmabam. Assumere iii cap loquebar physicae.
+      </p>
+      <p>
+        Cau cui sua est imbecillia deceperunt reducantur concipitur. Age expertus non cadavere judiciis. Difficilia ita falsitatis fal ostenditur percipitur meo cohibendam. Intra gi quasi im factu potui illam ob. An me dicitur suppono ha adeoque ab sentire. Serie novas is an verba istud se ipsam. Eae infigatur ita creatione conceptum deo. Percipitur tot ego constanter res perfectius tractandae. Ii nequidem profecto ut aberrare at mentibus id. Originis quidquid cessarem id et gi.
+      </p>
+      <p>
+        Loquar habent videri stupor fallar noluit cur nec. Pleraque eo caeteras in curantes proposui interdum immittit. Color facit de ii volui nulli alium vitam. Diversi rea divelli impetus ingenii creavit assideo sui. Rei praeterea duo vox eos studebunt praestari. Meos ac ea modi quin an alia is. Ex an veat ob dici vera rari nolo. Iisdem genera ad possim at factas dormio ex.
+      </p>
+    </section>
+  </sections>
+</document>

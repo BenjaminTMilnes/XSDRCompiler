@@ -13,11 +13,15 @@ namespace XSDR
         public string PageTemplateReference { get; set; }
         public XSDRPageTemplate PageTemplate { get { return _document.Templates.FirstOrDefault(t => t is XSDRPageTemplate && t.Reference == PageTemplateReference) as XSDRPageTemplate; } }
 
+        public XSDRPageSize PageSize { get; set; }
+
         public IList<IXSDRPageElement> Subelements { get; set; }
 
         public XSDRSection(XSDRDocument document)
         {
             _document = document;
+
+            PageSize = new XSDRPageSize();
 
             Subelements = new List<IXSDRPageElement>();
         }

@@ -172,11 +172,11 @@ namespace XSDR
             {
                 var context = new WordExportContext(wordDocument);
 
-                context.SetPageSizeForCurrentSection();
-                context.SetPageMarginForCurrentSection();
-
                 foreach (var s in document.Sections)
                 {
+                    context.SetPageSizeForCurrentSection();
+                    context.SetPageMarginForCurrentSection();
+
                     foreach (var e1 in s.Subelements)
                     {
                         if (e1 is XSDRParagraph || e1 is XSDRHeading)

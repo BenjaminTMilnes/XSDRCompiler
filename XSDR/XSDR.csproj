@@ -70,6 +70,7 @@
     <Compile Include="XSDRListItem.cs" />
     <Compile Include="XSDROrderedList.cs" />
     <Compile Include="XSDRPageBreak.cs" />
+    <Compile Include="XSDRPageSize.cs" />
     <Compile Include="XSDRPageTemplate.cs" />
     <Compile Include="XSDRPageVariable.cs" />
     <Compile Include="XSDRParagraph.cs" />

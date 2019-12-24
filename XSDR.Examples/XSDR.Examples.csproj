@@ -49,6 +49,8 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="Examples\example1.dss" />
+    <None Include="Examples\example2.dss" />
+    <None Include="Examples\example3.dss" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\XSDR\XSDR.csproj">
@@ -57,7 +59,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Examples\example1.xml" />
     <Content Include="Examples\example2.xml" />
+    <Content Include="Examples\example3.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
