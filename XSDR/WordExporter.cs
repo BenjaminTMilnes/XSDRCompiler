@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
@@ -32,7 +29,9 @@ namespace XSDR
             var header = _mainPart.AddNewPart<HeaderPart>();
             var footer = _mainPart.AddNewPart<FooterPart>();
 
-            _body = _mainPart.Document.AppendChild(new Body());
+            _body = new Body();
+
+            _mainPart.Document.AppendChild(_body);
 
             _currentSectionProperties = new SectionProperties();
 
@@ -74,32 +73,42 @@ namespace XSDR
         public void BeginNewParagraph()
         {
             _currentParagraphProperties = new ParagraphProperties();
-            _currentParagraph = _body.AppendChild(new Paragraph(_currentParagraphProperties));
+            _currentParagraph = new Paragraph(_currentParagraphProperties);
+
+            _body.AppendChild(_currentParagraph);
         }
 
         public void SetIndentationForCurrentParagraph(XSDRLength length)
         {
-            _currentParagraphProperties.Append(new Indentation() { Hanging = length.Times(-1).MSWUnits.ToString() });
+            var indentation = new Indentation();
+
+            indentation.Hanging = length.Times(-1).MSWUnits.ToString();
+
+            _currentParagraphProperties.Append(indentation);
         }
 
         public void SetJustificationForCurrentParagraph(XSDRParagraphAlignment paragraphAlignment)
         {
+            var justification = new Justification();
+
             if (paragraphAlignment == XSDRParagraphAlignment.LeftAlign)
             {
-                _currentParagraphProperties.Append(new Justification() { Val = JustificationValues.Left });
+                justification.Val = JustificationValues.Left;
             }
             if (paragraphAlignment == XSDRParagraphAlignment.RightAlign)
             {
-                _currentParagraphProperties.Append(new Justification() { Val = JustificationValues.Right });
+                justification.Val = JustificationValues.Right;
             }
             if (paragraphAlignment == XSDRParagraphAlignment.Centred)
             {
-                _currentParagraphProperties.Append(new Justification() { Val = JustificationValues.Center });
+                justification.Val = JustificationValues.Center;
             }
             if (paragraphAlignment == XSDRParagraphAlignment.LeftJustified)
             {
-                _currentParagraphProperties.Append(new Justification() { Val = JustificationValues.Both });
+                justification.Val = JustificationValues.Both;
             }
+
+            _currentParagraphProperties.Append(justification);
         }
 
         public void SetFontStyle(XSDRFontStyle fontStyle)
@@ -132,7 +141,9 @@ namespace XSDR
 
         public void AddTextToParagraph(string text)
         {
-            var run = _currentParagraph.AppendChild(new Run());
+            var run = new Run();
+
+            _currentParagraph.AppendChild(run);
 
             run.PrependChild(_currentRunProperties);
             run.AppendChild(new Text() { Text = text, Space = SpaceProcessingModeValues.Preserve });
@@ -140,11 +151,12 @@ namespace XSDR
 
         public void AddPageBreakToBody()
         {
-            var paragraph = _body.AppendChild(new Paragraph());
-            var run = paragraph.AppendChild(new Run());
+            var paragraph = new Paragraph();
+            var run = new Run();
 
+            _body.AppendChild(paragraph);
+            paragraph.AppendChild(run);
             run.AppendChild(new Break() { Type = BreakValues.Page });
-
         }
     }
 
@@ -152,15 +164,13 @@ namespace XSDR
     {
         public void ExportXSDRDocument(XSDRDocument document, string filePath)
         {
-            OpenSettings openSettings = new OpenSettings();
+            var openSettings = new OpenSettings();
 
             openSettings.MarkupCompatibilityProcessSettings = new MarkupCompatibilityProcessSettings(MarkupCompatibilityProcessMode.ProcessAllParts, FileFormatVersions.Office2013);
 
-            using (WordprocessingDocument wordDocument = WordprocessingDocument.Create(filePath, WordprocessingDocumentType.Document))
+            using (var wordDocument = WordprocessingDocument.Create(filePath, WordprocessingDocumentType.Document))
             {
                 var context = new WordExportContext(wordDocument);
-
-                var n = 1;
 
                 context.SetPageSizeForCurrentSection();
                 context.SetPageMarginForCurrentSection();
@@ -171,14 +181,15 @@ namespace XSDR
                     {
                         if (e1 is XSDRParagraph || e1 is XSDRHeading)
                         {
+                            var e2 = e1 as XSDRContentElement;
+
                             context.BeginNewParagraph();
 
-                            context.SetIndentationForCurrentParagraph((e1 as XSDRContentElement).CalculatedStyle.ParagraphIndentation);
-                            context.SetJustificationForCurrentParagraph((e1 as XSDRContentElement).CalculatedStyle.ParagraphAlignment);
+                            context.SetIndentationForCurrentParagraph(e2.CalculatedStyle.ParagraphIndentation);
+                            context.SetJustificationForCurrentParagraph(e2.CalculatedStyle.ParagraphAlignment);
+                            context.SetFontStyle(e2.CalculatedStyle.FontStyle);
 
-                            context.SetFontStyle((e1 as XSDRContentElement).CalculatedStyle.FontStyle);
-
-                            ExportXSDRPageElements(context, e1 as XSDRContentElement, (e1 as XSDRContentElement).Subelements);
+                            ExportXSDRPageElements(context, e2, e2.Subelements);
                         }
                         /*   if (e1 is XSDRUnorderedList || e1 is XSDROrderedList)
                            {
@@ -234,7 +245,9 @@ namespace XSDR
         {
             if (xsdrPageElement is XSDRTextElement) { ExportXSDRTextElement(context, xsdrPageElement as XSDRTextElement); }
 
-            if (xsdrPageElement is XSDRItalic || xsdrPageElement is XSDRBold || xsdrPageElement is XSDRUnderline || xsdrPageElement is XSDRStrikethrough) { ExportXSDRInlineElement(context, container, xsdrPageElement as XSDRContentElement); }
+            var isInlineElement = (xsdrPageElement is XSDRItalic || xsdrPageElement is XSDRBold || xsdrPageElement is XSDRUnderline || xsdrPageElement is XSDRStrikethrough);
+
+            if (isInlineElement) { ExportXSDRInlineElement(context, container, xsdrPageElement as XSDRContentElement); }
 
             if (xsdrPageElement is XSDRCitation) { ExportXSDRCitation(context, container, xsdrPageElement as XSDRCitation); }
         }
