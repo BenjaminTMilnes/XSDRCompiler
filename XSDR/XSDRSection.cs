@@ -8,11 +8,17 @@ namespace XSDR
 {
     public class XSDRSection
     {
+        private XSDRDocument _document;
+
         public string PageTemplateReference { get; set; }
+        public XSDRPageTemplate PageTemplate { get { return _document.Templates.FirstOrDefault(t => t is XSDRPageTemplate && t.Reference == PageTemplateReference) as XSDRPageTemplate; } }
+
         public IList<IXSDRPageElement> Subelements { get; set; }
 
-        public XSDRSection()
+        public XSDRSection(XSDRDocument document)
         {
+            _document = document;
+
             Subelements = new List<IXSDRPageElement>();
         }
     }

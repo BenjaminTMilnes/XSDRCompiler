@@ -87,7 +87,7 @@ namespace XSDR
 
             foreach (XmlNode section in sections)
             {
-                var s = new XSDRSection();
+                var s = new XSDRSection(_xsdrDocument);
 
                 s.Subelements = GetPageElementsFromXML(section.ChildNodes);
 
