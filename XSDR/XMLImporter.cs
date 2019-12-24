@@ -16,9 +16,15 @@ namespace XSDR
         private DSSImporter _dssImporter;
         private XSDRDocument _xsdrDocument;
 
+        private string[] _headingTags;
+        private int[] _headingTagLevels;
+
         public XMLImporter()
         {
             _dssImporter = new DSSImporter();
+
+            _headingTags = new string[] { "h1", "h2", "h3", "h4", "h5", "h6", "h7", "h8", "h9", "h10", "heading1", "heading2", "heading3", "heading4", "heading5", "heading6", "heading7", "heading8", "heading9", "heading10" };
+            _headingTagLevels = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
         }
 
         public XSDRDocument ImportDocument(string xmlFilePath, string dssFilePath = "")
@@ -31,6 +37,26 @@ namespace XSDR
 
             xmlDocument.Load(xmlFilePath);
 
+            ImportMetadata(xmlDocument, xsdrDocument);
+            ImportTemplates(xmlDocument, xsdrDocument);
+            ImportSections(xmlDocument, xsdrDocument);
+            ImportBibliography(xmlDocument, xsdrDocument);
+
+            if (dssFilePath != "")
+            {
+                var dss = File.ReadAllText(dssFilePath);
+                var dssDocument = _dssImporter.ImportDocument(dss);
+
+                var dssResolver = new DSSResolver();
+
+                dssResolver.ResolveDSS(dssDocument, xsdrDocument);
+            }
+
+            return xsdrDocument;
+        }
+
+        private void ImportMetadata(XmlDocument xmlDocument, XSDRDocument xsdrDocument)
+        {
             var version = xmlDocument.SelectSingleNode("/document").Attributes["version"].Value;
             var title = xmlDocument.SelectSingleNode("/document/title").InnerText;
             var subtitle = xmlDocument.SelectSingleNode("/document/subtitle").InnerText;
@@ -40,7 +66,10 @@ namespace XSDR
             xsdrDocument.Title = title;
             xsdrDocument.Subtitle = subtitle;
             xsdrDocument.Keywords = keywords.Split(',').Select(s => s.Trim());
+        }
 
+        private void ImportTemplates(XmlDocument xmlDocument, XSDRDocument xsdrDocument)
+        {
             var pageTemplates = xmlDocument.SelectNodes("/document/templates/page-template");
 
             foreach (XmlNode pageTemplate in pageTemplates)
@@ -51,9 +80,24 @@ namespace XSDR
 
                 xsdrDocument.Templates.Add(pt);
             }
+        }
 
+        private void ImportSections(XmlDocument xmlDocument, XSDRDocument xsdrDocument)
+        {
             var sections = xmlDocument.SelectNodes("/document/sections/section");
 
+            foreach (XmlNode section in sections)
+            {
+                var s = new XSDRSection(xsdrDocument);
+
+                s.Subelements = GetPageElementsFromXML(section.ChildNodes);
+
+                xsdrDocument.Sections.Add(s);
+            }
+        }
+
+        private void ImportBibliography(XmlDocument xmlDocument, XSDRDocument xsdrDocument)
+        {
             if (xmlDocument.SelectSingleNode("/document/bibliography") != null && xmlDocument.SelectSingleNode("/document/bibliography/references") != null)
             {
                 var references = xmlDocument.SelectNodes("/document/bibliography/references/reference");
@@ -84,27 +128,6 @@ namespace XSDR
                     }
                 }
             }
-
-            foreach (XmlNode section in sections)
-            {
-                var s = new XSDRSection(_xsdrDocument);
-
-                s.Subelements = GetPageElementsFromXML(section.ChildNodes);
-
-                xsdrDocument.Sections.Add(s);
-            }
-
-            if (dssFilePath != "")
-            {
-                var dss = File.ReadAllText(dssFilePath);
-                var dssDocument = _dssImporter.ImportDocument(dss);
-
-                var dssResolver = new DSSResolver();
-
-                dssResolver.ResolveDSS(dssDocument, xsdrDocument);
-            }
-
-            return xsdrDocument;
         }
 
         private bool BibliographicReferenceExists(string referenceName)
@@ -139,13 +162,18 @@ namespace XSDR
             return elements;
         }
 
+        private string CompressWhiteSpace(string text)
+        {
+            return Regex.Replace(text, "\\s+", " ");
+        }
+
         private IXSDRPageElement GetPageElementFromXML(XmlNode xmlNode)
         {
             if (xmlNode.NodeType == XmlNodeType.Text)
             {
                 var text = xmlNode.InnerText;
 
-                text = Regex.Replace(text, "\\s+", " ");
+                text = CompressWhiteSpace(text);
 
                 return new XSDRTextElement(text);
             }
@@ -162,11 +190,15 @@ namespace XSDR
                     {
                         if (p.Subelements.First() is XSDRTextElement)
                         {
-                            (p.Subelements.First() as XSDRTextElement).Text = (p.Subelements.First() as XSDRTextElement).Text.TrimStart();
+                            var e = p.Subelements.First() as XSDRTextElement;
+
+                            e.Text = e.Text.TrimStart();
                         }
                         if (p.Subelements.Last() is XSDRTextElement)
                         {
-                            (p.Subelements.Last() as XSDRTextElement).Text = (p.Subelements.Last() as XSDRTextElement).Text.TrimEnd();
+                            var e = p.Subelements.Last() as XSDRTextElement;
+
+                            e.Text = e.Text.TrimEnd();
                         }
                     }
 
@@ -235,53 +267,10 @@ namespace XSDR
 
                     return li;
                 }
-                if ((new string[] { "h1", "h2", "h3", "h4", "h5", "h6", "h7", "h8", "h9", "h10", "heading1", "heading2", "heading3", "heading4", "heading5", "heading6", "heading7", "heading8", "heading9", "heading10" }).Any(t => t == xmlNode.Name))
+                if (_headingTags.Any(t => t == xmlNode.Name))
                 {
-                    var level = 0;
-
-                    switch (xmlNode.Name)
-                    {
-                        case "h1":
-                        case "heading1":
-                            level = 1;
-                            break;
-                        case "h2":
-                        case "heading2":
-                            level = 2;
-                            break;
-                        case "h3":
-                        case "heading3":
-                            level = 3;
-                            break;
-                        case "h4":
-                        case "heading4":
-                            level = 4;
-                            break;
-                        case "h5":
-                        case "heading5":
-                            level = 5;
-                            break;
-                        case "h6":
-                        case "heading6":
-                            level = 6;
-                            break;
-                        case "h7":
-                        case "heading7":
-                            level = 7;
-                            break;
-                        case "h8":
-                        case "heading8":
-                            level = 8;
-                            break;
-                        case "h9":
-                        case "heading9":
-                            level = 9;
-                            break;
-                        case "h10":
-                        case "heading10":
-                            level = 10;
-                            break;
-                    }
+                    var i = Array.IndexOf(_headingTags, xmlNode.Name);
+                    var level = _headingTagLevels[i];
 
                     var h = new XSDRHeading(level);
 
