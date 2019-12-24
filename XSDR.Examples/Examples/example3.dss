@@ -4,6 +4,18 @@
   margin: 1.75cm 1.75cm;
 }
 
+h1{
+ font-name: Book Antiqua;
+ font-height: 20pt;
+ paragraph-alignment: centred;
+}
+
+h2{
+ font-name: Book Antiqua;
+ font-height: 15pt;
+ paragraph-alignment: centred;
+ font-angle: italic;
+}
 p{
  font-name: Book Antiqua;
  font-height: 12pt;

@@ -15,7 +15,17 @@ namespace XSDR
             {
                 foreach (var section in xsdrDocument.Sections)
                 {
-              
+                    foreach (var property in styleRule.Properties)
+                    {
+                        if (property.Name == "page-size")
+                        {
+                            section.PageSize = XSDRPageSizes.FromText(property.Value);
+                        }
+                        if (property.Name == "margin")
+                        {
+                            section.PageMargin = XSDRMargin.FromText(property.Value);
+                        }
+                    }
 
                     ResolveElements(styleRule, section.Subelements);
                 }

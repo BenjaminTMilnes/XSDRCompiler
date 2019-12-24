@@ -21,7 +21,20 @@
   </templates>
   <sections>
     <section ptr="halftitlepage" style-class="halftitlepage">
-      
+      <h1>
+        <v name="title" />
+      </h1>
+      <h2>
+        <v name="subtitle" />
+      </h2>
+    </section>
+    <section ptr="titlepage" style-class="halftitlepage">
+      <h1>
+        <v name="title" />
+      </h1>
+      <h2>
+        <v name="subtitle" />
+      </h2>
     </section>
     <section ptr="main" style-class="main">
 

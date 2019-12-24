@@ -301,13 +301,22 @@ namespace XSDR
 
                     return footer;
                 }
-                if (xmlNode.Name == "pv" || xmlNode.Name == "page-variable")
+                if (xmlNode.Name == "v" || xmlNode.Name == "pv" || xmlNode.Name == "page-variable")
                 {
                     var pv = new XSDRPageVariable();
 
                     if (xmlNode.Attributes["name"] != null)
                     {
                         pv.Name = xmlNode.Attributes["name"].Value;
+                    }
+
+                    if (pv.Name == "title")
+                    {
+                        pv.Value = _xsdrDocument.Title;
+                    }
+                    if (pv.Name == "subtitle")
+                    {
+                        pv.Value = _xsdrDocument.Subtitle;
                     }
 
                     ApplyInlineStyling(xmlNode, pv);

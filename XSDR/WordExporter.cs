@@ -158,6 +158,19 @@ namespace XSDR
             paragraph.AppendChild(run);
             run.AppendChild(new Break() { Type = BreakValues.Page });
         }
+        public void AddSectionBreakToBody()
+        {
+            var paragraph = new Paragraph();
+            var paragraphProperties = new ParagraphProperties();
+            var sectionProperties = new SectionProperties();
+            var sectionType = new SectionType() { Val = SectionMarkValues.NextPage };
+
+            sectionProperties.Append(sectionType);
+            paragraphProperties.Append(sectionProperties);
+            paragraph.Append(paragraphProperties);
+
+            _body.AppendChild(paragraph);
+        }
     }
 
     public class WordExporter
@@ -172,8 +185,15 @@ namespace XSDR
             {
                 var context = new WordExportContext(wordDocument);
 
+                var n = 0;
+
                 foreach (var s in document.Sections)
                 {
+                    if (n > 0)
+                    {
+                        context.AddSectionBreakToBody();
+                    }
+
                     context.SetPageSizeForCurrentSection(s.PageSize.Width.Millimetres, s.PageSize.Height.Millimetres);
                     context.SetPageMarginForCurrentSection(s.PageMargin.Top.Millimetres, s.PageMargin.Bottom.Millimetres, s.PageMargin.Left.Millimetres, s.PageMargin.Right.Millimetres);
 
@@ -229,6 +249,8 @@ namespace XSDR
                             context.AddPageBreakToBody();
                         }
                     }
+
+                    n++;
                 }
             }
         }
@@ -250,6 +272,8 @@ namespace XSDR
             if (isInlineElement) { ExportXSDRInlineElement(context, container, xsdrPageElement as XSDRContentElement); }
 
             if (xsdrPageElement is XSDRCitation) { ExportXSDRCitation(context, container, xsdrPageElement as XSDRCitation); }
+
+            if (xsdrPageElement is XSDRPageVariable) { ExportXSDRVariable(context, container, xsdrPageElement as XSDRPageVariable); }
         }
 
         protected void ExportXSDRTextElement(WordExportContext context, XSDRTextElement xsdrTextElement)
@@ -272,6 +296,12 @@ namespace XSDR
 
             context.SetFontStyle(container.CalculatedStyle.FontStyle);
             context.AddTextToParagraph(text);
+        }
+
+        protected void ExportXSDRVariable(WordExportContext context, XSDRContentElement container, XSDRPageVariable pageVariable)
+        {
+            context.SetFontStyle(container.CalculatedStyle.FontStyle);
+            context.AddTextToParagraph(pageVariable.Value);
         }
     }
 }
