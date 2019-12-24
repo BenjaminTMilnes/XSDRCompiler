@@ -68,6 +68,7 @@
     <Compile Include="XSDRItalic.cs" />
     <Compile Include="XSDRLength.cs" />
     <Compile Include="XSDRListItem.cs" />
+    <Compile Include="XSDRMargin.cs" />
     <Compile Include="XSDROrderedList.cs" />
     <Compile Include="XSDRPageBreak.cs" />
     <Compile Include="XSDRPageSize.cs" />

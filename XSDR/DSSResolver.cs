@@ -15,6 +15,8 @@ namespace XSDR
             {
                 foreach (var section in xsdrDocument.Sections)
                 {
+              
+
                     ResolveElements(styleRule, section.Subelements);
                 }
             }
@@ -95,7 +97,22 @@ namespace XSDR
             }
         }
 
-        protected void ResolveElements(DSSStyleRule styleRule, IEnumerable<IXSDRPageElement> elements)
+        protected void ApplyStyleRulePropertiesToSection(IEnumerable<DSSProperty> properties, XSDRSection section)
+        {
+            foreach (var property in properties)
+            {
+                if (property.Name == "page-size")
+                {
+                    section.PageSize = XSDRPageSizes.FromText(property.Value);
+                }
+                if (property.Name == "margin")
+                {
+                    section.PageMargin = XSDRMargin.FromText(property.Value);
+                }
+            }
+        }
+
+            protected void ResolveElements(DSSStyleRule styleRule, IEnumerable<IXSDRPageElement> elements)
         {
             foreach (var element in elements)
             {

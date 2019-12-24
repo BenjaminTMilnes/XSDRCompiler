@@ -174,8 +174,8 @@ namespace XSDR
 
                 foreach (var s in document.Sections)
                 {
-                    context.SetPageSizeForCurrentSection();
-                    context.SetPageMarginForCurrentSection();
+                    context.SetPageSizeForCurrentSection(s.PageSize.Width.Millimetres, s.PageSize.Height.Millimetres);
+                    context.SetPageMarginForCurrentSection(s.PageMargin.Top.Millimetres, s.PageMargin.Bottom.Millimetres, s.PageMargin.Left.Millimetres, s.PageMargin.Right.Millimetres);
 
                     foreach (var e1 in s.Subelements)
                     {

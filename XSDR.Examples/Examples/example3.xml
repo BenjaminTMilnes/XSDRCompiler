@@ -20,6 +20,9 @@
     </page-template>
   </templates>
   <sections>
+    <section ptr="halftitlepage" style-class="halftitlepage">
+      
+    </section>
     <section ptr="main" style-class="main">
 
       <p>

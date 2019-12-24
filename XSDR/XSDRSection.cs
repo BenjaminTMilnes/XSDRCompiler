@@ -14,6 +14,7 @@ namespace XSDR
         public XSDRPageTemplate PageTemplate { get { return _document.Templates.FirstOrDefault(t => t is XSDRPageTemplate && t.Reference == PageTemplateReference) as XSDRPageTemplate; } }
 
         public XSDRPageSize PageSize { get; set; }
+        public XSDRMargin PageMargin { get; set; }
 
         public IList<IXSDRPageElement> Subelements { get; set; }
 
@@ -22,6 +23,7 @@ namespace XSDR
             _document = document;
 
             PageSize = new XSDRPageSize();
+            PageMargin = XSDRMargin.Zero;
 
             Subelements = new List<IXSDRPageElement>();
         }

@@ -91,6 +91,8 @@ namespace XSDR
             _points = points;
         }
 
+        public static XSDRLength Zero { get { return new XSDRLength(0); } }
+
         public static XSDRLength FromText(string text)
         {
             var r = new Regex(@"^([\d]+(\.[\d]+)?)[\s]*(pt|pc|in|mm|cm|dm|m)$");

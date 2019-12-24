@@ -1,5 +1,11 @@
 ﻿
 .main{
-  page-size: a4;
-  margin: 1cm 1cm 1cm 1cm;
+  page-size: a5;
+  margin: 1.75cm 1.75cm;
+}
+
+p{
+ font-name: Book Antiqua;
+ font-height: 12pt;
+ paragraph-alignment: justified;
 }
